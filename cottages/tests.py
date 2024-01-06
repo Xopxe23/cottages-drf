@@ -27,6 +27,7 @@ class CottageModelTests(APITestCase):
             address='Test Address',
             latitude=40.7128,
             longitude=-74.0060,
+            price=9500,
             options={'pool': True, 'parking': False, 'air_conditioning': True, 'wifi': False}
         )
         self.create_url = reverse("cottage-create")
@@ -38,6 +39,7 @@ class CottageModelTests(APITestCase):
             "address": 'Test Address',
             "latitude": 40.7128,
             "longitude": -74.0060,
+            "price": 9500,
             "options": {'pool': True, 'parking': False, 'air_conditioning': True, 'wifi': False}
         }
         response = self.client.post(self.create_url, cottage_data, format='json')
@@ -71,6 +73,7 @@ class CottageModelTests(APITestCase):
             "address": 'Test Address',
             "latitude": 40.3128,
             "longitude": -74.2160,
+            "price": 4500,
             "options": {'pool': False, 'parking': False, 'air_conditioning': True, 'wifi': False}
         }
         response = self.client.put(self.detail_url, data=cottage_data, format='json')

@@ -1,10 +1,13 @@
+from django.db.models import Avg, Prefetch
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from cottages.models import Cottage
+from cottages.models import Cottage, CottageComment, CottageImage
 from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import CottageSerializer
 
@@ -63,7 +66,19 @@ class CreateCottageView(generics.CreateAPIView):
 
 class ListCottagesView(generics.ListAPIView):
     serializer_class = CottageSerializer
-    queryset = Cottage.objects.all()
+    queryset = Cottage.objects.select_related("owner").only(
+        'id', 'owner__first_name', "owner__last_name", 'address', "price",
+        'latitude', 'longitude', 'options', "images", "comments"
+    ).prefetch_related(
+        Prefetch("images", queryset=CottageImage.objects.only("cottage", "image")),
+        Prefetch("comments", queryset=CottageComment.objects.select_related("user").only(
+            "id", 'user__first_name', "user__last_name", "rating", "comment", "cottage"
+        ))
+    ).annotate(average_rating=Avg('comments__rating')).all()
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ["address"]
+    ordering_fields = ["price", "average_rating"]
+    ordering = ["-average_rating"]
 
     @swagger_auto_schema(
         responses={200: CottageSerializer(many=True)},
@@ -76,6 +91,7 @@ class ListCottagesView(generics.ListAPIView):
         :return: List of cottages.
         :rtype: rest_framework.response.Response
         """
+
         return super().get(request, *args, **kwargs)
 
 

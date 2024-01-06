@@ -19,3 +19,9 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data["password"] = hashed_password
         user = super(UserSerializer, self).create(validated_data)
         return user
+
+
+class UserFullNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailUser
+        fields = ["first_name", "last_name"]
