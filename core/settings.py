@@ -56,7 +56,9 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'users',
-    'cottages'
+    'cottages',
+    'relations',
+    'towns'
 ]
 
 MIDDLEWARE = [
