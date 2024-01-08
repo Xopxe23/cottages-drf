@@ -6,7 +6,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from cottages.models import Cottage, CottageImage, CottageRules
+from cottages.models import Cottage
 from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import CottageDetailSerializer, CottageListSerializer
 from relations.models import UserCottageReview
@@ -38,9 +38,10 @@ class ListCottageView(generics.ListAPIView):
     filterset_fields = ["name"]
     ordering_fields = ["price", "average_cottage_rating"]
     ordering = ["-average_cottage_rating"]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
-class RetrieveUpdateCottageView(generics.RetrieveUpdateDestroyAPIView):
+class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CottageDetailSerializer
     queryset = Cottage.objects.select_related("town", "category").only(
         "category__name", "town__name", "name", "description", "address", "price", "guests", "beds", "rooms",

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from cottages.models import Cottage, CottageAmenities, CottageCategory, CottageImage, CottageRules
 from relations.models import UserCottageReview
 from towns.serializers import TownNameSerializer
-from users.serializers import UserFullNameSerializer, UserSerializer
+from users.serializers import UserFullNameSerializer
 
 
 class CottageImageSerializer(serializers.ModelSerializer):
@@ -56,6 +56,7 @@ class CottageDetailSerializer(serializers.ModelSerializer):
     images = CottageImageSerializer(many=True, read_only=True)
     town = TownNameSerializer(read_only=True)
     category = CottageCategorySerializer(read_only=True)
+    user = UserFullNameSerializer(read_only=True)
     rules = CottageRulesSerializer(read_only=True)
     amenities = CottageAmenitiesSerializer(read_only=True)
     reviews = CottageReviewSerializer(many=True, read_only=True)
@@ -67,6 +68,6 @@ class CottageDetailSerializer(serializers.ModelSerializer):
         model = Cottage
         fields = [
             'id', 'town', 'category', "name", "description", 'address', "latitude", "longitude", "price",
-            "rules", "amenities", "guests", "beds", "total_area", "rooms", "reviews", "images",
+            "user", "rules", "amenities", "guests", "beds", "total_area", "rooms", "reviews", "images",
             "average_cottage_rating", "average_cleanliness_rating", "average_owner_rating"
         ]

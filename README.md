@@ -10,20 +10,19 @@
 
 ### Для подготвки docker образа:
 
+```
+docker compose build
+```
+
 #### Подготавливаем БД (применяем миграции) 
 ```
-./manage.py makemigrations && ./manage.py migrate
+docker-compose run web-app ./manage.py makemigrations && docker-compose run web-app ./manage.py migrate
 ```
 
 #### Заполняем БД данными
 ```
-./manage.py loaddata fixtures/amenities.json fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json fixtures/rules.json fixtures/towns.json fixtures/users.json
+docker-compose run web-app ./manage.py loaddata fixtures/amenities.json fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json fixtures/rules.json fixtures/towns.json fixtures/users.json
 
-```
-
-#### Билдим образ контейнера
-```
-docker compose build
 ```
 
 ### Для запуска контейнера:
