@@ -8,4 +8,4 @@ services:
       - .:/cottages-app
 
     command: >
-      sh -c  "./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
+      sh -c  "./manage.py runserver 0.0.0.0:8000"
