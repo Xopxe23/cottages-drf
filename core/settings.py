@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "debug_toolbar",
     'django_filters',
+    'social_django',
     'drf_yasg',
 
     'users',
@@ -87,6 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
         },
     },
@@ -153,6 +155,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User settings
 
 AUTH_USER_MODEL = 'users.EmailUser'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/cottages/"
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51820666'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'joUYMS6LUfYLDzg5rsdW'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', "first_name", "last_name"]
+SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+
 
 SWAGGER_SETTINGS = {
     'DEFAULT_INFO': 'core.urls.api_info',

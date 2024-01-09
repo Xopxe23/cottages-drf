@@ -25,7 +25,7 @@ class EmailUserManager(BaseUserManager):
 class EmailUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, db_index=True)
-    phone_number = models.CharField(unique=True, max_length=10, validators=[
+    phone_number = models.CharField(unique=True, max_length=10, null=True, validators=[
         RegexValidator(r'^\d{10}$', message='Phone number must be exactly 10 digits.')
     ], verbose_name="Номер телефона")
     first_name = models.CharField(max_length=30, blank=True, verbose_name="Имя")
