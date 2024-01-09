@@ -158,6 +158,7 @@ AUTH_USER_MODEL = 'users.EmailUser'
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -168,6 +169,10 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = 'joUYMS6LUfYLDzg5rsdW'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', "first_name", "last_name"]
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = '8ebfcdec3d014c7fbf06c13ab44c184d'
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = 'bb36514a34b8403e84a14a28a1882177'
+SOCIAL_AUTH_YANDEX_OAUTH2_REDIRECT_URI = 'http://localhost:8000/auth/complete/yandex-oauth2/'
+SOCIAL_AUTH_YANDEX_OAUTH2_SCOPE = ['login:info']
 
 SWAGGER_SETTINGS = {
     'DEFAULT_INFO': 'core.urls.api_info',

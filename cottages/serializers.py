@@ -51,11 +51,9 @@ class CottageListSerializer(serializers.ModelSerializer):
                   "beds", "rooms", "average_cottage_rating", "images"]
 
 
-class CottageDetailSerializer(serializers.ModelSerializer):
+class CottageCreateSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     images = CottageImageSerializer(many=True, read_only=True)
-    town = TownNameSerializer(read_only=True)
-    category = CottageCategorySerializer(read_only=True)
     user = UserFullNameSerializer(read_only=True)
     rules = CottageRulesSerializer(read_only=True)
     amenities = CottageAmenitiesSerializer(read_only=True)
@@ -71,3 +69,8 @@ class CottageDetailSerializer(serializers.ModelSerializer):
             "user", "rules", "amenities", "guests", "beds", "total_area", "rooms", "reviews", "images",
             "average_cottage_rating", "average_cleanliness_rating", "average_owner_rating"
         ]
+
+
+class CottageDetailSerializer(CottageCreateSerializer):
+    town = TownNameSerializer(read_only=True)
+    category = CottageCategorySerializer(read_only=True)

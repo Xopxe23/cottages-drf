@@ -2,7 +2,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from cottages.models import Cottage
+from cottages.models import Cottage, CottageCategory
+from towns.models import Town
 from users.models import EmailUser
 
 
@@ -22,13 +23,26 @@ class CottageModelTests(APITestCase):
             first_name='John',
             last_name='Doe'
         )
+        self.category1 = CottageCategory.objects.create(
+            name="cottage",
+        )
+        self.town1 = Town.objects.create(
+            name="Vladikavkaz"
+        )
         self.cottage1 = Cottage.objects.create(
-            owner=self.user1,
+            user=self.user1,
+            town=self.town1,
+            category=self.category1,
+            name="Family",
+            description="Very good cottage",
             address='Test Address',
             latitude=40.7128,
             longitude=-74.0060,
             price=9500,
-            options={'pool': True, 'parking': False, 'air_conditioning': True, 'wifi': False}
+            guests=5,
+            beds=4,
+            rooms=3,
+            total_area=50,
         )
         self.create_url = reverse("cottage-create")
         self.list_url = reverse("cottage-list")
@@ -36,25 +50,28 @@ class CottageModelTests(APITestCase):
 
     def test_cottage_creation(self):
         cottage_data = {
+            "town": self.town1.id,
+            "category": self.category1.id,
+            "name": "Family",
+            "description": "Very good cottage",
             "address": 'Test Address',
             "latitude": 40.7128,
             "longitude": -74.0060,
             "price": 9500,
-            "options": {'pool': True, 'parking': False, 'air_conditioning': True, 'wifi': False}
+            "guests": 5,
+            "beds": 4,
+            "rooms": 3,
+            "total_area": 50,
         }
-        response = self.client.post(self.create_url, cottage_data, format='json')
+        response = self.client.post(self.create_url, cottage_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.client.force_login(self.user1)
-        response = self.client.post(self.create_url, cottage_data, format='json')
+        response = self.client.post(self.create_url, cottage_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["message"], 'Cottage created successfully')
 
-        cottage_data["options"]["pool"] = "hello"
-        response = self.client.post(self.create_url, cottage_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("options", response.data)
-        cottage_data.pop("options")
+        cottage_data.pop("guests")
+        response = self.client.post(self.create_url, cottage_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_cottage_list(self):
@@ -70,11 +87,16 @@ class CottageModelTests(APITestCase):
     def test_cottage_update(self):
         self.client.force_login(self.user2)
         cottage_data = {
+            "name": "Family",
+            "description": "Very good cottage",
             "address": 'Test Address',
-            "latitude": 40.3128,
-            "longitude": -74.2160,
-            "price": 4500,
-            "options": {'pool': False, 'parking': False, 'air_conditioning': True, 'wifi': False}
+            "latitude": 40.7128,
+            "longitude": -74.0060,
+            "price": 9500,
+            "guests": 5,
+            "beds": 4,
+            "rooms": 3,
+            "total_area": 50,
         }
         response = self.client.put(self.detail_url, data=cottage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

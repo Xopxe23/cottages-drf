@@ -26,7 +26,11 @@ docker-compose run web-app ./manage.py loaddata fixtures/amenities.json fixtures
 ```
 
 ### Для запуска контейнера:
-
 ```
 docker compose up
+```
+
+### Для запуска тестов:
+```
+docker-compose run web-app coverage run manage.py test && docker-compose run web-app coverage report
 ```

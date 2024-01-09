@@ -8,12 +8,12 @@ from rest_framework.response import Response
 
 from cottages.models import Cottage
 from cottages.permissions import IsOwnerOrReadOnly
-from cottages.serializers import CottageDetailSerializer, CottageListSerializer
+from cottages.serializers import CottageCreateSerializer, CottageDetailSerializer, CottageListSerializer
 from relations.models import UserCottageReview
 
 
 class CreateCottageView(generics.CreateAPIView):
-    serializer_class = CottageDetailSerializer
+    serializer_class = CottageCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -24,7 +24,7 @@ class CreateCottageView(generics.CreateAPIView):
         return response
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class ListCottageView(generics.ListAPIView):
