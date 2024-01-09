@@ -4,19 +4,19 @@ from rest_framework.test import APITestCase
 
 from cottages.models import Cottage, CottageCategory
 from towns.models import Town
-from users.models import EmailUser
+from users.models import User
 
 
 class CottageModelTests(APITestCase):
     def setUp(self):
-        self.user1 = EmailUser.objects.create_user(
+        self.user1 = User.objects.create_user(
             email='test@example.com',
             password='Test123',
             phone_number='1234567890',
             first_name='John',
             last_name='Doe'
         )
-        self.user2 = EmailUser.objects.create_user(
+        self.user2 = User.objects.create_user(
             email='test2@example.com',
             password='Test123',
             phone_number='0123456789',

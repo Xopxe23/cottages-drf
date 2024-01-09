@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from users.models import EmailUser
+from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_staff = serializers.CharField(read_only=True)
 
     class Meta:
-        model = EmailUser
+        model = User
         fields = ['id', 'email', 'password', 'phone_number', 'first_name', 'last_name', 'is_active', 'is_staff']
 
     def create(self, validated_data):
@@ -23,5 +23,5 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserFullNameSerializer(serializers.ModelSerializer):
     class Meta:
-        model = EmailUser
+        model = User
         fields = ["first_name", "last_name"]

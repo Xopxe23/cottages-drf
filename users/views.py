@@ -5,12 +5,12 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.models import EmailUser
+from users.models import User
 from users.serializers import UserSerializer
 
 
 class RegisterUserView(generics.CreateAPIView):
-    queryset = EmailUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
     @swagger_auto_schema(

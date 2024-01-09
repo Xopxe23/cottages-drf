@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 
 
-class EmailUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
@@ -22,7 +22,7 @@ class EmailUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class EmailUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, db_index=True)
     phone_number = models.CharField(unique=True, max_length=10, null=True, validators=[
@@ -33,7 +33,7 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name="Активен")
     is_staff = models.BooleanField(default=False, verbose_name="Сотрудник")
 
-    objects = EmailUserManager()
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

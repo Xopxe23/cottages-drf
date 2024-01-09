@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from users.models import EmailUser
+from users.models import User
 
 
 class RegisterViewTest(APITestCase):
@@ -19,7 +19,7 @@ class RegisterViewTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        user = EmailUser.objects.get(email='test@example.com')
+        user = User.objects.get(email='test@example.com')
         self.assertEqual(user.first_name, 'John')
         self.assertEqual(user.last_name, 'Doe')
 
@@ -53,7 +53,7 @@ class RegisterViewTest(APITestCase):
 
 class LoginLogoutViewTest(APITestCase):
     def setUp(self):
-        self.user = EmailUser.objects.create_user(
+        self.user = User.objects.create_user(
             email='test@example.com',
             password='Test123',
             phone_number='1234567890',
@@ -106,7 +106,7 @@ class LoginLogoutViewTest(APITestCase):
 
 class UserProfileViewTest(APITestCase):
     def setUp(self):
-        self.user = EmailUser.objects.create_user(
+        self.user = User.objects.create_user(
             email='test@example.com',
             password='Test123',
             phone_number='1234567890',
