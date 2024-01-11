@@ -131,10 +131,13 @@ class EmailVerificationRequestView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        EmailVerification.objects.filter(user=request.user).delete()
+        user = request.user
+        if request.user.is_verified:
+            return Response({"error": "you're already verified"}, status.HTTP_200_OK)
+        EmailVerification.objects.filter(user=user).delete()
         expiration = datetime.datetime.now() + datetime.timedelta(hours=48)
         email_verification = EmailVerification.objects.create(
-            user=request.user,
+            user=user,
             expiration=expiration
         )
         send_mail(
@@ -156,9 +159,9 @@ class EmailVerificationView(APIView):
         if not code:
             return Response({'error': 'Please give code'}, status.HTTP_400_BAD_REQUEST)
         email_verification = EmailVerification.objects.filter(user=user, pk=code).first()
-        expired = email_verification.expiration
         if not email_verification:
             return Response({'error': 'Bad code'}, status.HTTP_400_BAD_REQUEST)
+        expired = email_verification.expiration
         email_verification.delete()
         if datetime.datetime.now() > expired:
             return Response({'error': 'Code expired'}, status.HTTP_400_BAD_REQUEST)

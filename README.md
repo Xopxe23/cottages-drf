@@ -17,7 +17,7 @@ docker compose build
 
 #### Подготавливаем БД (применяем миграции) 
 ```
-docker-compose run web-app ./manage.py makemigrations && docker-compose run web-app ./manage.py migrate
+docker-compose run web-app ./manage.py migrate
 ```
 
 #### Заполняем БД данными
