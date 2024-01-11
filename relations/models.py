@@ -21,6 +21,8 @@ class UserCottageReview(models.Model):
     cleanliness_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг чистоты")
     owner_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг хозяина")
     comment = models.TextField(verbose_name="Отзыв")
+    # created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+    # updated_at = models.DateTimeField(auto_now_add=True, verbose_name='Обновлено')
 
     class Meta:
         verbose_name = 'Отзыв коттеджа'

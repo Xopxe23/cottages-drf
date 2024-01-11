@@ -104,20 +104,28 @@ DATABASES = {
     }
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
-    }
-}
 
 # For localhost
 # CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 # CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+#
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://redis:6379",
+#     }
+# }
 
 # For docker
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -176,13 +184,14 @@ AUTHENTICATION_BACKENDS = (
 # SMTP_PORT = 587
 # EMAIL_HOST_USER = 'admin@beiron.org'
 # EMAIL_HOST_PASSWORD = '1Beiron@beiron.co'
-# # EMAIL_USE_TLS = True
+# EMAIL_USE_TLS = True
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
-LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/cottages/"
-
 # OAuth
+
+LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/cottages/"
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '51820666'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'joUYMS6LUfYLDzg5rsdW'

@@ -132,6 +132,7 @@ class EmailVerificationRequestView(APIView):
 
     def post(self, request):
         user = request.user
+        EmailVerification.objects.filter(user=user).delete()
         if request.user.is_verified:
             return Response({"error": "you're already verified"}, status.HTTP_200_OK)
         expiration = datetime.datetime.now() + datetime.timedelta(hours=48)

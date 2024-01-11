@@ -9,29 +9,40 @@
 - Работа с БД Redis. Кэширование. 
 - Работа с Celery. Отложенная отправка писем на email для верификации.
 
-### Для подготвки docker образа:
 
+#### Создаем виртуальное окружение
 ```
-docker compose build
-```
-
-#### Подготавливаем БД (применяем миграции) 
-```
-docker-compose run web-app ./manage.py migrate
+python3 -m venv .venv
 ```
 
-#### Заполняем БД данными
+#### Устаналиваем зависимости
 ```
-docker-compose run web-app ./manage.py loaddata fixtures/amenities.json fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json fixtures/rules.json fixtures/towns.json fixtures/users.json
+pip install -r requirements.txt
+```
+
+#### Подготавливаем БД и заполняем данными
+```
+./manage.py migrate
+
+```
+```
+./manage.py loaddata fixtures/amenities.json fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json fixtures/rules.json fixtures/towns.json fixtures/users.json
 
 ```
 
-### Для запуска контейнера:
+#### Для запуска тестов:
 ```
-docker compose up
+coverage run manage.py test && coverage report
 ```
 
-### Для запуска тестов:
+### Docker:
+
 ```
-docker-compose run web-app coverage run manage.py test && docker-compose run web-app coverage report
+docker-compose build
 ```
+
+```
+docker-compose up
+```
+
+

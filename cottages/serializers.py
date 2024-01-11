@@ -18,12 +18,12 @@ class CottageCategorySerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class CottageReviewSerializer(serializers.ModelSerializer):
+class UserCottageReviewSerializer(serializers.ModelSerializer):
     user = UserFullNameSerializer(read_only=True)
 
     class Meta:
         model = UserCottageReview
-        fields = ['user', "cottage_rating", "cleanliness_rating", "owner_rating", "comment"]
+        fields = ['id', 'user', "cottage_rating", "cleanliness_rating", "owner_rating", "comment"]
 
 
 class CottageRulesSerializer(serializers.ModelSerializer):
@@ -57,7 +57,7 @@ class CottageCreateSerializer(serializers.ModelSerializer):
     user = UserFullNameSerializer(read_only=True)
     rules = CottageRulesSerializer(read_only=True)
     amenities = CottageAmenitiesSerializer(read_only=True)
-    reviews = CottageReviewSerializer(many=True, read_only=True)
+    reviews = UserCottageReviewSerializer(many=True, read_only=True)
     average_cottage_rating = serializers.FloatField(read_only=True)
     average_cleanliness_rating = serializers.FloatField(read_only=True)
     average_owner_rating = serializers.FloatField(read_only=True)
