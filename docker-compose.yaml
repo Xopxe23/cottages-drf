@@ -1,4 +1,11 @@
 services:
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    container_name: redis
+
   web-app:
     build:
       context: .
@@ -9,3 +16,14 @@ services:
 
     command: >
       sh -c  "./manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - redis
+
+  celery:
+    build:
+      context: .
+    container_name: cottages_celery
+    command: >
+      sh -c "celery -A core worker -l INFO"
+    depends_on:
+      - redis

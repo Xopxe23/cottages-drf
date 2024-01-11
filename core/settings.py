@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -30,7 +29,6 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "0.0.0.0"
 ]
-
 
 INTERNAL_IPS = [
     # ...
@@ -96,7 +94,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -107,6 +104,20 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
+
+# For localhost
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+# CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+
+# For docker
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,7 +137,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -137,7 +147,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -151,7 +160,6 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Custom User settings
 
 AUTH_USER_MODEL = 'users.User'
@@ -162,9 +170,19 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+# Email
+#
+# EMAIL_HOST = 'sm12.hosting.reg.ru'
+# SMTP_PORT = 587
+# EMAIL_HOST_USER = 'admin@beiron.org'
+# EMAIL_HOST_PASSWORD = '1Beiron@beiron.co'
+# # EMAIL_USE_TLS = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+
 LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/cottages/"
+
+# OAuth
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '51820666'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'joUYMS6LUfYLDzg5rsdW'
@@ -178,7 +196,6 @@ SOCIAL_AUTH_YANDEX_OAUTH2_REDIRECT_URI = 'http://localhost:8000/auth/complete/ya
 SWAGGER_SETTINGS = {
     'DEFAULT_INFO': 'core.urls.api_info',
 }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

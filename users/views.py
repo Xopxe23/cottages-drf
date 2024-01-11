@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.auth import authenticate, login, logout
-from django.core.mail import send_mail
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
@@ -11,6 +10,7 @@ from rest_framework.views import APIView
 
 from users.models import EmailVerification, User
 from users.serializers import UserSerializer
+from users.tasks import send_email_verification
 
 
 class RegisterUserView(generics.CreateAPIView):
@@ -134,20 +134,13 @@ class EmailVerificationRequestView(APIView):
         user = request.user
         if request.user.is_verified:
             return Response({"error": "you're already verified"}, status.HTTP_200_OK)
-        EmailVerification.objects.filter(user=user).delete()
         expiration = datetime.datetime.now() + datetime.timedelta(hours=48)
         email_verification = EmailVerification.objects.create(
             user=user,
             expiration=expiration
         )
-        send_mail(
-            "Verify your account",
-            f"Your verification code: {email_verification.pk}",
-            "from@example.com",
-            [request.user.email],
-            fail_silently=False,
-        )
-        return Response({"code": email_verification.pk}, status.HTTP_200_OK)
+        send_email_verification.delay(user.pk, email_verification.pk)
+        return Response({"success": "Check your email"}, status.HTTP_200_OK)
 
 
 class EmailVerificationView(APIView):
