@@ -4,6 +4,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.db import models
+from social_core.backends.vk import VKOAuth2
 
 
 class UserManager(BaseUserManager):
@@ -31,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, blank=True, verbose_name="Имя")
     last_name = models.CharField(max_length=30, blank=True, verbose_name="Фамилия")
     is_active = models.BooleanField(default=True, verbose_name="Активен")
+    is_verified = models.BooleanField(default=False, verbose_name="Верифицирован")
     is_staff = models.BooleanField(default=False, verbose_name="Сотрудник")
 
     objects = UserManager()
@@ -44,3 +46,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+
+class EmailVerification(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
+    expiration = models.DateTimeField()
+
+    def __str__(self):
+        return f'Email verification for {self.user}'
+
+    class Meta:
+        verbose_name = 'Email подтверждение'
+        verbose_name_plural = 'Email подтверждения'

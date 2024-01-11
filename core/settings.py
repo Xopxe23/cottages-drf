@@ -136,7 +136,7 @@ TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -161,6 +161,8 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.yandex.YandexOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/cottages/"
 

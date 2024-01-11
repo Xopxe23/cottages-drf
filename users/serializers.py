@@ -7,11 +7,13 @@ from users.models import User
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     is_active = serializers.CharField(read_only=True)
+    is_verified = serializers.CharField(read_only=True)
     is_staff = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'password', 'phone_number', 'first_name', 'last_name', 'is_active', 'is_staff']
+        fields = ['id', 'email', 'password', 'phone_number', 'first_name', 'last_name',
+                  'is_active', 'is_verified', 'is_staff']
 
     def create(self, validated_data):
         password = validated_data.pop("password")

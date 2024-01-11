@@ -1,11 +1,15 @@
+import datetime
+
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.models import User
+from users.models import EmailVerification, User
 from users.serializers import UserSerializer
 
 
@@ -121,3 +125,43 @@ class UserProfileView(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         else:
             return Response({'error': 'User is not authenticated'}, status.HTTP_401_UNAUTHORIZED)
+
+
+class EmailVerificationRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        EmailVerification.objects.filter(user=request.user).delete()
+        expiration = datetime.datetime.now() + datetime.timedelta(hours=48)
+        email_verification = EmailVerification.objects.create(
+            user=request.user,
+            expiration=expiration
+        )
+        send_mail(
+            "Verify your account",
+            f"Your verification code: {email_verification.pk}",
+            "from@example.com",
+            [request.user.email],
+            fail_silently=False,
+        )
+        return Response({"code": email_verification.pk}, status.HTTP_200_OK)
+
+
+class EmailVerificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        code = request.data.get("code")
+        if not code:
+            return Response({'error': 'Please give code'}, status.HTTP_400_BAD_REQUEST)
+        email_verification = EmailVerification.objects.filter(user=user, pk=code).first()
+        expired = email_verification.expiration
+        if not email_verification:
+            return Response({'error': 'Bad code'}, status.HTTP_400_BAD_REQUEST)
+        email_verification.delete()
+        if datetime.datetime.now() > expired:
+            return Response({'error': 'Code expired'}, status.HTTP_400_BAD_REQUEST)
+        user.is_verified = True
+        user.save()
+        return Response({"success": "You're email is verified"}, status.HTTP_200_OK)
