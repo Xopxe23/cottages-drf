@@ -10,16 +10,16 @@ from towns.serializers import TownAttractionSerializer, TownSerializer
 class TownViewSet(viewsets.ModelViewSet):
     queryset = Town.objects.prefetch_related("images", "attractions")
     serializer_class = TownSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly, ]
 
 
 class TownAttractionViewSet(viewsets.ModelViewSet):
     serializer_class = TownAttractionSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly, ]
 
     def get_queryset(self):
         town_id = self.kwargs.get('town_pk')
-        return TownAttraction.objects.filter(town__id=town_id)
+        return TownAttraction.objects.filter(town=town_id)
 
     def perform_create(self, serializer):
         town_id = self.kwargs.get('town_pk')

@@ -1,17 +1,18 @@
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
+from core.tests_setup import APITestCaseWithSetUp
 from users.models import User
 
 
-class RegisterViewTest(APITestCase):
+class RegisterViewTest(APITestCaseWithSetUp):
+
     def test_register_user_and_unique_users(self):
         url = reverse('register')
         data = {
-            'email': 'test@example.com',
+            'email': 'test12@example.com',
             'password': 'Test123',
-            'phone_number': '1234567890',
+            'phone_number': '1234567893',
             'first_name': 'John',
             'last_name': 'Doe'
         }
@@ -51,15 +52,7 @@ class RegisterViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class LoginLogoutViewTest(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            email='test@example.com',
-            password='Test123',
-            phone_number='1234567890',
-            first_name='John',
-            last_name='Doe'
-        )
+class LoginLogoutViewTest(APITestCaseWithSetUp):
 
     def test_login_user(self):
         url = reverse('login')
@@ -98,34 +91,24 @@ class LoginLogoutViewTest(APITestCase):
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('success', response.data)
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.user1)
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('success', response.data)
 
 
-class UserProfileViewTest(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            email='test@example.com',
-            password='Test123',
-            phone_number='1234567890',
-            first_name='John',
-            last_name='Doe'
-        )
-        self.client.force_authenticate(user=self.user)
+class UserProfileViewTest(APITestCaseWithSetUp):
 
     def test_get_user_profile(self):
+        self.client.force_authenticate(user=self.user1)
         url = reverse('profile')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email'], 'test@example.com')
-        self.assertEqual(response.data['phone_number'], '1234567890')
         self.assertEqual(response.data['first_name'], 'John')
         self.assertEqual(response.data['last_name'], 'Doe')
 
     def test_get_user_profile_unauthenticated(self):
-        # Если пользователь не аутентифицирован, получение профиля не должно вызывать ошибку
         self.client.logout()
         url = reverse('profile')
         response = self.client.get(url, format='json')

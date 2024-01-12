@@ -2,75 +2,15 @@ import datetime
 
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
-from cottages.models import Cottage, CottageAmenities, CottageCategory, CottageRules
-from towns.models import Town
-from users.models import User
+from core.tests_setup import APITestCaseWithSetUp
 
 
-class CottageModelTests(APITestCase):
+class CottageViewSetTest(APITestCaseWithSetUp):
+
     def setUp(self):
-        self.user1 = User.objects.create_user(
-            email='test@example.com',
-            password='Test123',
-            phone_number='1234567890',
-            first_name='John',
-            last_name='Doe'
-        )
-        self.user2 = User.objects.create_user(
-            email='test2@example.com',
-            password='Test123',
-            phone_number='0123456789',
-            first_name='John',
-            last_name='Doe'
-        )
-        self.category1 = CottageCategory.objects.create(
-            name="cottage",
-        )
-        self.town1 = Town.objects.create(
-            name="Vladikavkaz"
-        )
-        self.cottage1 = Cottage.objects.create(
-            user=self.user1,
-            town=self.town1,
-            category=self.category1,
-            name="Family",
-            description="Very good cottage",
-            address='Test Address',
-            latitude=40.7128,
-            longitude=-74.0060,
-            price=9500,
-            guests=5,
-            beds=4,
-            rooms=3,
-            total_area=50,
-        )
-        self.rules1 = CottageRules.objects.create(
-            cottage=self.cottage1,
-            check_in_time=datetime.time(hour=12),
-            check_out_time=datetime.time(hour=12),
-            with_children=True,
-            with_pets=False,
-            smoking=False,
-            parties=True,
-            need_documents=True
-        )
-        self.amenities1 = CottageAmenities.objects.create(
-            cottage=self.cottage1,
-            parking_spaces=2,
-            wifi=True,
-            tv=False,
-            air_conditioner=True,
-            hair_dryer=False,
-            electric_kettle=True
-        )
-        self.create_url = reverse("cottages-create")
-        self.list_url = reverse("cottages-list")
-        self.detail_url = reverse("cottages-detail", args=[self.cottage1.id])
-
-    def test_cottage_creation(self):
-        cottage_data = {
+        super().setUp()
+        self.cottage_data = {
             "town": self.town1.id,
             "category": self.category1.id,
             "name": "Family",
@@ -101,6 +41,12 @@ class CottageModelTests(APITestCase):
                 "electric_kettle": True
             },
         }
+        self.create_url = reverse("cottages-create")
+        self.list_url = reverse("cottages-list")
+        self.detail_url = reverse("cottages-detail", args=[self.cottage1.id])
+
+    def test_cottage_creation(self):
+        cottage_data = self.cottage_data
         response = self.client.post(self.create_url, cottage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -124,37 +70,7 @@ class CottageModelTests(APITestCase):
 
     def test_cottage_update(self):
         self.client.force_login(self.user2)
-        cottage_data = {
-            "town": self.town1.id,
-            "category": self.category1.id,
-            "name": "Family",
-            "description": "Very good cottage",
-            "address": 'Test Address',
-            "latitude": 40.7128,
-            "longitude": -74.0060,
-            "price": 9500,
-            "guests": 5,
-            "beds": 4,
-            "rooms": 3,
-            "total_area": 50,
-            "rules": {
-                "check_in_time": "12:00:00",
-                "check_out_time": "12:00:00",
-                "with_children": True,
-                "with_pets": False,
-                "smoking": False,
-                "parties": True,
-                "need_documents": True
-            },
-            "amenities": {
-                "parking_spaces": 2,
-                "wifi": True,
-                "tv": False,
-                "air_conditioner": True,
-                "hair_dryer": False,
-                "electric_kettle": True
-            },
-        }
+        cottage_data = self.cottage_data
         response = self.client.patch(self.detail_url, data=cottage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertIn("detail", response.data)
