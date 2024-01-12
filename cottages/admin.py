@@ -11,8 +11,8 @@ class CottageAdmin(admin.ModelAdmin):
 
 @admin.register(CottageCategory)
 class CottageCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", )
-    list_display_links = ("name", )
+    list_display = ("id", "name", )
+    list_display_links = ("id", "name", )
 
 
 @admin.register(CottageImage)

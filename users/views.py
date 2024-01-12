@@ -17,20 +17,7 @@ class RegisterUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    @swagger_auto_schema(
-        tags=['Auth'],
-        responses={
-            201: 'A success message if user registration is successful',
-            400: 'Bad request if validation fails',
-        },
-    )
     def post(self, request, *args, **kwargs):
-        """
-        Register a new user.
-
-        :return: A success message if user registration is successful.
-        :rtype: dict
-        """
         return super().post(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -53,7 +40,6 @@ class RegisterUserView(generics.CreateAPIView):
 
 class LoginView(APIView):
     @swagger_auto_schema(
-        tags=["Auth"],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -62,18 +48,9 @@ class LoginView(APIView):
             },
             required=['email', 'password'],
         ),
-        responses={
-            200: 'A success message if login is successful',
-            401: 'An error message if login is unsuccessful',
-        },
     )
     def post(self, request):
-        """
-        Log in a user.
 
-        :return: A success message if login is successful, an error message otherwise.
-        :rtype: dict
-        """
         email = request.data.get('email')
         password = request.data.get('password')
 
@@ -86,39 +63,15 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    @swagger_auto_schema(
-        tags=["Auth"],
-        responses={
-            200: 'A success message if logout is successful',
-            401: 'Unauthorized if the user is not authenticated',
-        },
-    )
-    def post(self, request):
-        """
-        Log out a user.
 
-        :return: A success message if logout is successful.
-        :rtype: dict
-        """
+    def post(self, request):
         logout(request)
         return Response({'success': 'Logged out'}, status=status.HTTP_200_OK)
 
 
 class UserProfileView(APIView):
-    @swagger_auto_schema(
-        tags=['Auth'],  # Добавление тега 'User'
-        responses={
-            200: 'A user profile if the user is authenticated',
-            401: 'Unauthorized if the user is not authenticated',
-        },
-    )
-    def get(self, request):
-        """
-        Get user profile information.
 
-        :return: A user profile if the user is authenticated.
-        :rtype: dict
-        """
+    def get(self, request):
         if request.user.is_authenticated:
             user = request.user
             serializer = UserSerializer(user)

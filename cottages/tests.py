@@ -1,8 +1,10 @@
+import datetime
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from cottages.models import Cottage, CottageCategory
+from cottages.models import Cottage, CottageAmenities, CottageCategory, CottageRules
 from towns.models import Town
 from users.models import User
 
@@ -44,9 +46,28 @@ class CottageModelTests(APITestCase):
             rooms=3,
             total_area=50,
         )
-        self.create_url = reverse("cottage-create")
-        self.list_url = reverse("cottage-list")
-        self.detail_url = reverse("cottage-detail", args=[self.cottage1.id])
+        self.rules1 = CottageRules.objects.create(
+            cottage=self.cottage1,
+            check_in_time=datetime.time(hour=12),
+            check_out_time=datetime.time(hour=12),
+            with_children=True,
+            with_pets=False,
+            smoking=False,
+            parties=True,
+            need_documents=True
+        )
+        self.amenities1 = CottageAmenities.objects.create(
+            cottage=self.cottage1,
+            parking_spaces=2,
+            wifi=True,
+            tv=False,
+            air_conditioner=True,
+            hair_dryer=False,
+            electric_kettle=True
+        )
+        self.create_url = reverse("cottages-create")
+        self.list_url = reverse("cottages-list")
+        self.detail_url = reverse("cottages-detail", args=[self.cottage1.id])
 
     def test_cottage_creation(self):
         cottage_data = {
@@ -62,8 +83,25 @@ class CottageModelTests(APITestCase):
             "beds": 4,
             "rooms": 3,
             "total_area": 50,
+            "rules": {
+                "check_in_time": "12:00:00",
+                "check_out_time": "12:00:00",
+                "with_children": True,
+                "with_pets": False,
+                "smoking": False,
+                "parties": True,
+                "need_documents": True
+            },
+            "amenities": {
+                "parking_spaces": 2,
+                "wifi": True,
+                "tv": False,
+                "air_conditioner": True,
+                "hair_dryer": False,
+                "electric_kettle": True
+            },
         }
-        response = self.client.post(self.create_url, cottage_data)
+        response = self.client.post(self.create_url, cottage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.client.force_login(self.user1)
@@ -87,6 +125,8 @@ class CottageModelTests(APITestCase):
     def test_cottage_update(self):
         self.client.force_login(self.user2)
         cottage_data = {
+            "town": self.town1.id,
+            "category": self.category1.id,
             "name": "Family",
             "description": "Very good cottage",
             "address": 'Test Address',
@@ -97,13 +137,30 @@ class CottageModelTests(APITestCase):
             "beds": 4,
             "rooms": 3,
             "total_area": 50,
+            "rules": {
+                "check_in_time": "12:00:00",
+                "check_out_time": "12:00:00",
+                "with_children": True,
+                "with_pets": False,
+                "smoking": False,
+                "parties": True,
+                "need_documents": True
+            },
+            "amenities": {
+                "parking_spaces": 2,
+                "wifi": True,
+                "tv": False,
+                "air_conditioner": True,
+                "hair_dryer": False,
+                "electric_kettle": True
+            },
         }
-        response = self.client.put(self.detail_url, data=cottage_data, format='json')
+        response = self.client.patch(self.detail_url, data=cottage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertIn("detail", response.data)
 
         self.client.force_login(self.user1)
-        response = self.client.put(self.detail_url, data=cottage_data, format='json')
+        response = self.client.patch(self.detail_url, data=cottage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(cottage_data["latitude"], response.data["latitude"])
 

@@ -1,11 +1,7 @@
-import datetime
 import time
-from uuid import UUID
 
 from celery import shared_task
 from django.core.mail import send_mail
-
-from users.models import EmailVerification, User
 
 
 @shared_task

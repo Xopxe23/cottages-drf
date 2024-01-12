@@ -3,22 +3,17 @@ from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from cottages.models import Cottage
 from cottages.permissions import IsOwnerOrReadOnly
-from cottages.serializers import (
-    CottageCreateSerializer,
-    CottageDetailSerializer,
-    CottageListSerializer,
-    UserCottageReviewSerializer,
-)
+from cottages.serializers import CottageCreateUpdateSerializer, CottageDetailUpdateSerializer, CottageListSerializer
 from relations.models import UserCottageReview
 
 
 class CreateCottageView(generics.CreateAPIView):
-    serializer_class = CottageCreateSerializer
+    serializer_class = CottageCreateUpdateSerializer
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -49,40 +44,15 @@ class ListCottageView(generics.ListAPIView):
 
 
 class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = CottageDetailSerializer
+    serializer_class = CottageDetailUpdateSerializer
     queryset = Cottage.objects.select_related("town", "category").only(
         "category__name", "town__name", "name", "description", "address", "price", "guests", "beds", "rooms",
         "total_area", "latitude", "longitude"
     ).prefetch_related(
-        "images", "rules",
-        Prefetch("reviews", queryset=UserCottageReview.objects.select_related("user"))
+        "images", "rules", "amenities"
     ).annotate(
         average_cottage_rating=Round(Avg("reviews__cottage_rating"), 1),
         average_cleanliness_rating=Round(Avg("reviews__cleanliness_rating"), 1),
         average_owner_rating=Round(Avg("reviews__owner_rating"), 1),
     ).all()
-    permission_classes = [IsOwnerOrReadOnly]
-
-
-class ListUserCottageReviewView(generics.ListCreateAPIView):
-    serializer_class = UserCottageReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        cottage_id = self.kwargs['cottage_id']
-        queryset = UserCottageReview.objects.filter(cottage_id=cottage_id).select_related("user").only(
-            'id', 'user__first_name', "user__last_name", "cottage_rating",
-            "comment", "cleanliness_rating", "owner_rating"
-        )
-        return queryset
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user, cottage_id=self.kwargs['cottage_id'])
-
-
-class UpdateDestroyReviewView(generics.UpdateAPIView, generics.DestroyAPIView):
-    serializer_class = UserCottageReviewSerializer
-    queryset = UserCottageReview.objects.select_related("user").only(
-        'user__first_name', "user__last_name", "cottage_rating", "comment", "cleanliness_rating", "owner_rating"
-    )
     permission_classes = [IsOwnerOrReadOnly]

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from cottages.models import Cottage, CottageAmenities, CottageCategory, CottageImage, CottageRules
-from relations.models import UserCottageReview
 from towns.serializers import TownNameSerializer
 from users.serializers import UserFullNameSerializer
 
@@ -16,14 +15,6 @@ class CottageCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CottageCategory
         fields = ["id", "name"]
-
-
-class UserCottageReviewSerializer(serializers.ModelSerializer):
-    user = UserFullNameSerializer(read_only=True)
-
-    class Meta:
-        model = UserCottageReview
-        fields = ['id', 'user', "cottage_rating", "cleanliness_rating", "owner_rating", "comment"]
 
 
 class CottageRulesSerializer(serializers.ModelSerializer):
@@ -51,13 +42,12 @@ class CottageListSerializer(serializers.ModelSerializer):
                   "beds", "rooms", "average_cottage_rating", "images"]
 
 
-class CottageCreateSerializer(serializers.ModelSerializer):
+class CottageCreateUpdateSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     images = CottageImageSerializer(many=True, read_only=True)
     user = UserFullNameSerializer(read_only=True)
-    rules = CottageRulesSerializer(read_only=True)
-    amenities = CottageAmenitiesSerializer(read_only=True)
-    reviews = UserCottageReviewSerializer(many=True, read_only=True)
+    rules = CottageRulesSerializer()
+    amenities = CottageAmenitiesSerializer()
     average_cottage_rating = serializers.FloatField(read_only=True)
     average_cleanliness_rating = serializers.FloatField(read_only=True)
     average_owner_rating = serializers.FloatField(read_only=True)
@@ -66,11 +56,42 @@ class CottageCreateSerializer(serializers.ModelSerializer):
         model = Cottage
         fields = [
             'id', 'town', 'category', "name", "description", 'address', "latitude", "longitude", "price",
-            "user", "rules", "amenities", "guests", "beds", "total_area", "rooms", "reviews", "images",
+            "user", "rules", "amenities", "guests", "beds", "total_area", "rooms", "images",
             "average_cottage_rating", "average_cleanliness_rating", "average_owner_rating"
         ]
 
+    def create(self, validated_data):
+        rules_data = validated_data.pop('rules', {})
+        amenities_data = validated_data.pop('amenities', {})
 
-class CottageDetailSerializer(CottageCreateSerializer):
+        cottage = Cottage.objects.create(**validated_data)
+
+        CottageRules.objects.create(cottage=cottage, **rules_data)
+        CottageAmenities.objects.create(cottage=cottage, **amenities_data)
+
+        return cottage
+
+    def update(self, instance, validated_data):
+        rules_data = validated_data.pop('rules', {})
+        amenities_data = validated_data.pop('amenities', {})
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+
+        rules_instance, _ = CottageRules.objects.get_or_create(cottage=instance)
+        for key, value in rules_data.items():
+            setattr(rules_instance, key, value)
+        rules_instance.save()
+
+        amenities_instance, _ = CottageAmenities.objects.get_or_create(cottage=instance)
+        for key, value in amenities_data.items():
+            setattr(amenities_instance, key, value)
+        amenities_instance.save()
+
+        return instance
+
+
+class CottageDetailUpdateSerializer(CottageCreateUpdateSerializer):
     town = TownNameSerializer(read_only=True)
     category = CottageCategorySerializer(read_only=True)
