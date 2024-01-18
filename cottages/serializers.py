@@ -8,7 +8,7 @@ from users.serializers import UserFullNameSerializer
 class CottageImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CottageImage
-        fields = ['image']
+        fields = ['id', 'image', 'order']
 
 
 class CottageCategorySerializer(serializers.ModelSerializer):
@@ -95,3 +95,18 @@ class CottageCreateUpdateSerializer(serializers.ModelSerializer):
 class CottageDetailUpdateSerializer(CottageCreateUpdateSerializer):
     town = TownNameSerializer(read_only=True)
     category = CottageCategorySerializer(read_only=True)
+
+
+class CottageImageUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField()
+    image = serializers.CharField(read_only=True)
+    order = serializers.IntegerField()
+
+    class Meta:
+        model = CottageImage
+        fields = ['id', 'image', 'order']
+
+    def validate_order(self, value):
+        if not isinstance(value, int):
+            raise serializers.ValidationError("Order должен быть целым числом.")
+        return value

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from ordered_model.admin import OrderedModelAdmin
 
 from cottages.models import Cottage, CottageAmenities, CottageCategory, CottageImage, CottageRules
 
@@ -16,9 +17,9 @@ class CottageCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(CottageImage)
-class CottageImageAdmin(admin.ModelAdmin):
-    list_display = ("cottage", )
-    list_display_links = ("cottage", )
+class CottageImageAdmin(OrderedModelAdmin):
+    list_display = ("id", 'image', 'move_up_down_links', "order")
+    list_display_links = ("id", "image")
 
 
 @admin.register(CottageRules)

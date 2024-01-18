@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from ordered_model.models import OrderedModel
 
 from towns.models import Town
 from users.models import User
@@ -89,12 +90,12 @@ def cottage_image_path(instance, filename):
     return os.path.join("cottage_images", str(cottage_id), filename)
 
 
-class CottageImage(models.Model):
+class CottageImage(OrderedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="images", verbose_name="Коттедж")
     image = models.ImageField(upload_to=cottage_image_path, verbose_name="Фотография")
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         verbose_name = 'Фотография коттеджа'
         verbose_name_plural = 'Фотографии коттеджа'
 
