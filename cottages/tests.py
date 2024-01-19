@@ -21,23 +21,11 @@ class CottageViewSetTest(APITestCaseWithSetUp):
             "beds": 4,
             "rooms": 3,
             "total_area": 50,
-            "rules": {
-                "check_in_time": "12:00:00",
-                "check_out_time": "12:00:00",
-                "with_children": True,
-                "with_pets": False,
-                "smoking": False,
-                "parties": True,
-                "need_documents": True
-            },
-            "amenities": {
-                "parking_spaces": 2,
-                "wifi": True,
-                "tv": False,
-                "air_conditioner": True,
-                "hair_dryer": False,
-                "electric_kettle": True
-            },
+            "parking_places": 2,
+            "check_in_time": "12:00:00",
+            "check_out_time": "12:00:00",
+            "rules": ["with_children", "with_pets", "parties", "need_documents"],
+            "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
         }
         self.create_url = reverse("cottages-create")
         self.list_url = reverse("cottages-list")

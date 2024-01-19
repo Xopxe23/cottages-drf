@@ -20,6 +20,7 @@ from cottages.serializers import (
     ImageUpdateSerializer,
 )
 from relations.models import UserCottageRent, UserCottageReview
+from relations.serializers import UserCottageReviewSerializer
 
 
 class CreateCottageView(generics.CreateAPIView):
@@ -39,13 +40,6 @@ class CreateCottageView(generics.CreateAPIView):
 
 class ListCottageView(generics.ListAPIView):
     serializer_class = CottageListSerializer
-    # queryset = Cottage.objects.select_related("category", "town").only(
-    #     "town__name", "category__name", "name", "price", "beds", "guests", "rooms", "total_area", "images"
-    # ).prefetch_related(
-    #     "images",
-    #     Prefetch("reviews", queryset=UserCottageReview.objects.only(
-    #         "cottage", "cottage_rating"))
-    # ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ["name"]
     ordering_fields = ["price", "average_rating"]
@@ -53,10 +47,8 @@ class ListCottageView(generics.ListAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        queryset = Cottage.objects.select_related("category", "town").prefetch_related(
-            "images",
-            Prefetch("reviews", queryset=UserCottageReview.objects.only(
-                "cottage", "cottage_rating"))
+        queryset = Cottage.objects.select_related("category", "town").prefetch_related("images", Prefetch(
+            "reviews", queryset=UserCottageReview.objects.only("cottage", "cottage_rating"))
         ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
 
         start_date = self.request.query_params.get('start_date')
@@ -82,12 +74,7 @@ class ListCottageView(generics.ListAPIView):
 
 class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CottageDetailUpdateSerializer
-    queryset = Cottage.objects.select_related("town", "category").only(
-        "category__name", "town__name", "name", "description", "address", "price", "guests", "beds", "rooms",
-        "total_area", "latitude", "longitude"
-    ).prefetch_related(
-        "images", "rules", "amenities"
-    ).annotate(
+    queryset = Cottage.objects.select_related("town", "category", "owner").prefetch_related("images").annotate(
         average_rating=Round(Avg("reviews__cottage_rating"), 1),
         average_cleanliness_rating=Round(Avg("reviews__cleanliness_rating"), 1),
         average_owner_rating=Round(Avg("reviews__owner_rating"), 1),

@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework.test import APITestCase
 
-from cottages.models import Cottage, CottageAmenities, CottageCategory, CottageRules
+from cottages.models import Cottage, CottageCategory
 from relations.models import UserCottageReview
 from towns.models import Town, TownAttraction
 from users.models import User
@@ -51,25 +51,11 @@ class APITestCaseWithSetUp(APITestCase):
             beds=4,
             rooms=3,
             total_area=50,
-        )
-        self.rules1 = CottageRules.objects.create(
-            cottage=self.cottage1,
+            parking_places=2,
             check_in_time=datetime.time(hour=12),
             check_out_time=datetime.time(hour=12),
-            with_children=True,
-            with_pets=False,
-            smoking=False,
-            parties=True,
-            need_documents=True
-        )
-        self.amenities1 = CottageAmenities.objects.create(
-            cottage=self.cottage1,
-            parking_spaces=2,
-            wifi=True,
-            tv=False,
-            air_conditioner=True,
-            hair_dryer=False,
-            electric_kettle=True
+            rules=["with_children", "with_pets", "parties", "need_documents"],
+            amenities=["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
         )
         self.review1 = UserCottageReview.objects.create(
             cottage=self.cottage1,

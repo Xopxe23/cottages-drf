@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from cottages.permissions import IsAuthorOrReadOnly, IsOwnerOrReadOnly
+from cottages.permissions import IsAuthorOrReadOnly
 from relations.models import UserCottageReview
 from relations.serializers import UserCottageReviewSerializer
 
@@ -12,10 +12,7 @@ class ListUserCottageReviewView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         cottage_id = self.kwargs['cottage_id']
-        queryset = UserCottageReview.objects.filter(cottage_id=cottage_id).select_related("user").only(
-            'id', 'user__first_name', "user__last_name", "cottage_rating",
-            "comment", "cleanliness_rating", "owner_rating"
-        )
+        queryset = UserCottageReview.objects.filter(cottage_id=cottage_id).select_related("user")
         return queryset
 
     def perform_create(self, serializer):
@@ -24,7 +21,5 @@ class ListUserCottageReviewView(generics.ListCreateAPIView):
 
 class UpdateDestroyReviewView(generics.UpdateAPIView, generics.DestroyAPIView):
     serializer_class = UserCottageReviewSerializer
-    queryset = UserCottageReview.objects.select_related("user").only(
-        'user__first_name', "user__last_name", "cottage_rating", "comment", "cleanliness_rating", "owner_rating"
-    )
+    queryset = UserCottageReview.objects.select_related("user")
     permission_classes = [IsAuthorOrReadOnly]

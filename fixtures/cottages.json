@@ -15,7 +15,12 @@
       "rooms": 3,
       "total_area": 50,
       "latitude": 42.833068,
-      "longitude": 44.305048
+      "longitude": 44.305048,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   },
   {
@@ -34,7 +39,12 @@
       "rooms": 5,
       "total_area": 240,
       "latitude": 42.833241,
-      "longitude": 44.305048
+      "longitude": 44.305048,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   },
   {
@@ -53,7 +63,12 @@
       "rooms": 3,
       "total_area": 90,
       "latitude": 42.836588,
-      "longitude": 44.308743
+      "longitude": 44.308743,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   },
   {
@@ -72,7 +87,12 @@
       "rooms": 5,
       "total_area": 150,
       "latitude": 42.955179,
-      "longitude": 43.723109
+      "longitude": 43.723109,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   },
   {
@@ -91,7 +111,12 @@
       "rooms": 3,
       "total_area": 70,
       "latitude": 42.901562,
-      "longitude": 43.620178
+      "longitude": 43.620178,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   },
   {
@@ -110,7 +135,12 @@
       "rooms": 4,
       "total_area": 120,
       "latitude": 42.870837,
-      "longitude": 43.957817
+      "longitude": 43.957817,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   },
   {
@@ -129,7 +159,12 @@
       "rooms": 2,
       "total_area": 100,
       "latitude": 42.870837,
-      "longitude": 43.957817
+      "longitude": 43.957817,
+      "parking_places": 2,
+      "check_in_time": "12:00:00",
+      "check_out_time": "12:00:00",
+      "rules": ["with_children", "with_pets", "parties", "need_documents"],
+      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
     }
   }
 ]

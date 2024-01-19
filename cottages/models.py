@@ -31,13 +31,18 @@ class Cottage(models.Model):
     description = models.TextField(verbose_name="Описание")
     town = models.ForeignKey(Town, on_delete=models.CASCADE, verbose_name="Населенный пункт")
     address = models.CharField(max_length=255, null=True, blank=True, verbose_name="Адрес")
+    latitude = models.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)], verbose_name="Широта")
+    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)], verbose_name="Долгота")
     price = models.PositiveIntegerField(validators=[MaxValueValidator(99999)], verbose_name="Цена")
     guests = models.PositiveIntegerField(validators=[MaxValueValidator(50)], verbose_name="Кол-во гостей")
     beds = models.PositiveIntegerField(validators=[MaxValueValidator(30)], verbose_name="Кол-во кроватей")
     rooms = models.PositiveIntegerField(validators=[MaxValueValidator(15)], verbose_name="Кол-во комнат")
     total_area = models.PositiveIntegerField(validators=[MaxValueValidator(500)], verbose_name="Общая площадь")
-    latitude = models.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)], verbose_name="Широта")
-    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)], verbose_name="Долгота")
+    parking_places = models.PositiveIntegerField(default=0, verbose_name="Кол-во парковочных мест")
+    check_in_time = models.TimeField(verbose_name="Время заезда")
+    check_out_time = models.TimeField(verbose_name="Время выезда")
+    rules = models.JSONField(verbose_name="Правила")
+    amenities = models.JSONField(verbose_name="Условия")
 
     class Meta:
         verbose_name = 'Коттедж'
@@ -45,44 +50,6 @@ class Cottage(models.Model):
 
     def __str__(self):
         return f'{self.name} in {self.town.name}'
-
-
-class CottageRules(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    cottage = models.OneToOneField(Cottage, on_delete=models.CASCADE, related_name="rules", verbose_name="Коттедж")
-    check_in_time = models.TimeField(verbose_name="Время заезда")
-    check_out_time = models.TimeField(verbose_name="Время выезда")
-    with_children = models.BooleanField(default=True, verbose_name="С детьми")
-    with_pets = models.BooleanField(default=False, verbose_name="С животными")
-    smoking = models.BooleanField(default=False, verbose_name="Курение")
-    parties = models.BooleanField(default=True, verbose_name="Вечеринки")
-    need_documents = models.BooleanField(default=True, verbose_name="Необходимость документов")
-
-    class Meta:
-        verbose_name = 'Правила коттеджа'
-        verbose_name_plural = 'Правила коттеджа'
-
-    def __str__(self):
-        return f"Rules for {self.cottage.name}"
-
-
-class CottageAmenities(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    cottage = models.OneToOneField(Cottage, on_delete=models.CASCADE, related_name="amenities", verbose_name="Коттедж")
-    parking_spaces = models.SmallIntegerField(validators=[MaxValueValidator(10)],
-                                              verbose_name="Кол-во парковочных мест")
-    wifi = models.BooleanField(default=False, verbose_name="Вай-фай")
-    tv = models.BooleanField(default=False, verbose_name="Телевизор")
-    air_conditioner = models.BooleanField(default=False, verbose_name="Кондиционер")
-    hair_dryer = models.BooleanField(default=False, verbose_name="Фен")
-    electric_kettle = models.BooleanField(default=False, verbose_name="Электрический чайник")
-
-    class Meta:
-        verbose_name = 'Удобства коттеджа'
-        verbose_name_plural = 'Удобства коттеджа'
-
-    def __str__(self):
-        return f"Amenities for {self.cottage.name}"
 
 
 def cottage_image_path(instance, filename):

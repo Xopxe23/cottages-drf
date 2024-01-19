@@ -12,7 +12,7 @@
 
 #### Создаем виртуальное окружение
 ```
-python3 -m venv .venv
+python3 -m venv .venv && source .venv/bin/activate
 ```
 
 #### Устаналиваем зависимости
@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ```
 ```
-./manage.py loaddata fixtures/amenities.json fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json fixtures/rules.json fixtures/towns.json fixtures/users.json
+./manage.py loaddata fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json  fixtures/towns.json fixtures/users.json
 
 ```
 
