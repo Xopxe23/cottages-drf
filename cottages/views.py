@@ -32,7 +32,7 @@ class CreateCottageView(generics.CreateAPIView):
         return response
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class ListCottageView(generics.ListAPIView):
@@ -43,11 +43,11 @@ class ListCottageView(generics.ListAPIView):
         "images",
         Prefetch("reviews", queryset=UserCottageReview.objects.only(
             "cottage", "cottage_rating"))
-    ).annotate(average_cottage_rating=Round(Avg("reviews__cottage_rating"), 1))
+    ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ["name"]
-    ordering_fields = ["price", "average_cottage_rating"]
-    ordering = ["-average_cottage_rating"]
+    ordering_fields = ["price", "average_rating"]
+    ordering = ["-average_rating"]
     permission_classes = [IsOwnerOrReadOnly]
 
 
@@ -59,7 +59,7 @@ class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
     ).prefetch_related(
         "images", "rules", "amenities"
     ).annotate(
-        average_cottage_rating=Round(Avg("reviews__cottage_rating"), 1),
+        average_rating=Round(Avg("reviews__cottage_rating"), 1),
         average_cleanliness_rating=Round(Avg("reviews__cleanliness_rating"), 1),
         average_owner_rating=Round(Avg("reviews__owner_rating"), 1),
     ).all()

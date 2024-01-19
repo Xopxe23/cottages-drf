@@ -32,23 +32,23 @@ class CottageAmenitiesSerializer(serializers.ModelSerializer):
 
 class CottageListSerializer(serializers.ModelSerializer):
     images = CottageImageSerializer(many=True, read_only=True)
-    average_cottage_rating = serializers.FloatField(read_only=True)
+    average_rating = serializers.FloatField(read_only=True)
     town = TownNameSerializer(read_only=True)
     category = CottageCategorySerializer(read_only=True)
 
     class Meta:
         model = Cottage
         fields = ['id', 'town', 'category', "name", "price", "guests", "total_area",
-                  "beds", "rooms", "average_cottage_rating", "images"]
+                  "beds", "rooms", "average_rating", "images"]
 
 
 class CottageCreateUpdateSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     images = CottageImageSerializer(many=True, read_only=True)
-    user = UserFullNameSerializer(read_only=True)
+    owner = UserFullNameSerializer(read_only=True)
     rules = CottageRulesSerializer()
     amenities = CottageAmenitiesSerializer()
-    average_cottage_rating = serializers.FloatField(read_only=True)
+    average_rating = serializers.FloatField(read_only=True)
     average_cleanliness_rating = serializers.FloatField(read_only=True)
     average_owner_rating = serializers.FloatField(read_only=True)
 
@@ -56,8 +56,8 @@ class CottageCreateUpdateSerializer(serializers.ModelSerializer):
         model = Cottage
         fields = [
             'id', 'town', 'category', "name", "description", 'address', "latitude", "longitude", "price",
-            "user", "rules", "amenities", "guests", "beds", "total_area", "rooms", "images",
-            "average_cottage_rating", "average_cleanliness_rating", "average_owner_rating"
+            "owner", "rules", "amenities", "guests", "beds", "total_area", "rooms", "images",
+            "average_rating", "average_cleanliness_rating", "average_owner_rating"
         ]
 
     def create(self, validated_data):

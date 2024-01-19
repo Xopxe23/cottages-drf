@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from cottages.permissions import IsOwnerOrReadOnly
+from cottages.permissions import IsAuthorOrReadOnly, IsOwnerOrReadOnly
 from relations.models import UserCottageReview
 from relations.serializers import UserCottageReviewSerializer
 
@@ -27,4 +27,4 @@ class UpdateDestroyReviewView(generics.UpdateAPIView, generics.DestroyAPIView):
     queryset = UserCottageReview.objects.select_related("user").only(
         'user__first_name', "user__last_name", "cottage_rating", "comment", "cleanliness_rating", "owner_rating"
     )
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly]

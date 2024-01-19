@@ -26,7 +26,7 @@ class CottageCategory(models.Model):
 class Cottage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(CottageCategory, on_delete=models.CASCADE, verbose_name="Категория")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     name = models.CharField(max_length=255, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
     town = models.ForeignKey(Town, on_delete=models.CASCADE, verbose_name="Населенный пункт")

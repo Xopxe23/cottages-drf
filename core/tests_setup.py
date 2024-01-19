@@ -38,7 +38,7 @@ class APITestCaseWithSetUp(APITestCase):
             description="123132"
         )
         self.cottage1 = Cottage.objects.create(
-            user=self.user1,
+            owner=self.user1,
             town=self.town1,
             category=self.category1,
             name="Family",
