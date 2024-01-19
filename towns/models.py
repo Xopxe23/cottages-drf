@@ -4,6 +4,7 @@ import uuid
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from ordered_model.models import OrderedModel
 
 
 class Town(models.Model):
@@ -24,12 +25,12 @@ def town_image_path(instance, filename):
     return os.path.join("town_images", str(town_id), filename)
 
 
-class TownImage(models.Model):
+class TownImage(OrderedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     town = models.ForeignKey(Town, on_delete=models.CASCADE, related_name="images", verbose_name="Населенный пункт")
     image = models.ImageField(upload_to=town_image_path, verbose_name="Фотография")
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         verbose_name = 'Фотография населенного пункта'
         verbose_name_plural = 'Фотография населенного пункта'
 
@@ -62,13 +63,13 @@ def attraction_image_path(instance, filename):
     return os.path.join("attraction_images", str(attraction_id), filename)
 
 
-class AttractionImage(models.Model):
+class AttractionImage(OrderedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     attraction = models.ForeignKey(TownAttraction, on_delete=models.CASCADE, related_name="images",
                                    verbose_name="Достопримечательнось")
     image = models.ImageField(upload_to=attraction_image_path, verbose_name="Фотография")
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         verbose_name = 'Фотография достопримечательности'
         verbose_name_plural = 'Фотографии достопримечательности'
 

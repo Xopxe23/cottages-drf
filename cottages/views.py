@@ -14,8 +14,8 @@ from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import (
     CottageCreateUpdateSerializer,
     CottageDetailUpdateSerializer,
-    CottageImageUpdateSerializer,
     CottageListSerializer,
+    ImageUpdateSerializer,
 )
 from relations.models import UserCottageReview
 
@@ -66,7 +66,7 @@ class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
 
-class UpdateImageOrder(APIView):
+class UpdateCottageImageOrder(APIView):
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -79,7 +79,7 @@ class UpdateImageOrder(APIView):
         ),
     )
     def post(self, request, *args, **kwargs):
-        serializer = CottageImageUpdateSerializer(data=request.data)
+        serializer = ImageUpdateSerializer(data=request.data)
         if serializer.is_valid():
             image_id = serializer.validated_data.get("id")
             new_order = serializer.validated_data.get("order")

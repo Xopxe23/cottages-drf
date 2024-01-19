@@ -97,7 +97,7 @@ class CottageDetailUpdateSerializer(CottageCreateUpdateSerializer):
     category = CottageCategorySerializer(read_only=True)
 
 
-class CottageImageUpdateSerializer(serializers.ModelSerializer):
+class ImageUpdateSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField()
     image = serializers.CharField(read_only=True)
     order = serializers.IntegerField()

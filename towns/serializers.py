@@ -7,7 +7,14 @@ class TownImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TownImage
-        fields = ['image']
+        fields = ["id", 'image', "order"]
+
+
+class AttractionImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TownImage
+        fields = ["id", 'image', "order"]
 
 
 class TownNameSerializer(serializers.ModelSerializer):
@@ -34,7 +41,8 @@ class TownSerializer(serializers.ModelSerializer):
 
 
 class TownAttractionSerializer(serializers.ModelSerializer):
+    images = TownImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = TownAttraction
-        fields = ["id", "name", "description"]
+        fields = ["id", "name", "description", "images"]
