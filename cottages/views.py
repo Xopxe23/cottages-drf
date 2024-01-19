@@ -1,4 +1,6 @@
-from django.db.models import Avg, Max, Prefetch
+from datetime import datetime
+
+from django.db.models import Avg, Max, Prefetch, Q
 from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
@@ -17,7 +19,7 @@ from cottages.serializers import (
     CottageListSerializer,
     ImageUpdateSerializer,
 )
-from relations.models import UserCottageReview
+from relations.models import UserCottageRent, UserCottageReview
 
 
 class CreateCottageView(generics.CreateAPIView):
@@ -37,18 +39,45 @@ class CreateCottageView(generics.CreateAPIView):
 
 class ListCottageView(generics.ListAPIView):
     serializer_class = CottageListSerializer
-    queryset = Cottage.objects.select_related("category", "town").only(
-        "town__name", "category__name", "name", "price", "beds", "guests", "rooms", "total_area", "images"
-    ).prefetch_related(
-        "images",
-        Prefetch("reviews", queryset=UserCottageReview.objects.only(
-            "cottage", "cottage_rating"))
-    ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
+    # queryset = Cottage.objects.select_related("category", "town").only(
+    #     "town__name", "category__name", "name", "price", "beds", "guests", "rooms", "total_area", "images"
+    # ).prefetch_related(
+    #     "images",
+    #     Prefetch("reviews", queryset=UserCottageReview.objects.only(
+    #         "cottage", "cottage_rating"))
+    # ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ["name"]
     ordering_fields = ["price", "average_rating"]
     ordering = ["-average_rating"]
     permission_classes = [IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Cottage.objects.select_related("category", "town").prefetch_related(
+            "images",
+            Prefetch("reviews", queryset=UserCottageReview.objects.only(
+                "cottage", "cottage_rating"))
+        ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
+
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
+
+        if start_date and end_date:
+            try:
+                datetime.strptime(start_date, '%Y-%m-%d')
+                datetime.strptime(end_date, '%Y-%m-%d')
+            except ValueError:
+                return queryset
+
+            booked_cottages_subquery = UserCottageRent.objects.filter(
+                Q(start_date__range=[start_date, end_date]) | Q(end_date__range=[
+                    start_date, end_date
+                ]) | (Q(start_date__lte=start_date) & Q(end_date__gte=end_date))
+            ).values_list('cottage')
+
+            queryset = queryset.exclude(id__in=booked_cottages_subquery)
+
+        return queryset
 
 
 class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
