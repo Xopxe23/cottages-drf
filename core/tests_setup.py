@@ -60,8 +60,9 @@ class APITestCaseWithSetUp(APITestCase):
         self.review1 = UserCottageReview.objects.create(
             cottage=self.cottage1,
             user=self.user1,
-            cottage_rating=4,
-            cleanliness_rating=3,
-            owner_rating=5,
+            location_rating=5,
+            cleanliness_rating=5,
+            communication_rating=5,
+            value_rating=5,
             comment="Все отлично",
         )

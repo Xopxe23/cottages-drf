@@ -12,8 +12,10 @@ class CottageReviewViewSetTest(APITestCaseWithSetUp):
         self.detail_url = reverse("reviews-detail", args=[self.cottage1.id, self.review1.id])
         self.review_data = {
             "cottage_rating": 4,
-            "cleanliness_rating": 3,
-            "owner_rating": 5,
+            "location_rating": 5,
+            "cleanliness_rating": 5,
+            "communication_rating": 5,
+            "value_rating": 5,
             "comment": "Все отлично",
         }
 

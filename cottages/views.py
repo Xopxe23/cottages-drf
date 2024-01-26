@@ -14,17 +14,16 @@ from rest_framework.views import APIView
 from cottages.models import Cottage, CottageImage
 from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import (
-    CottageCreateUpdateSerializer,
+    CottageCreateSerializer,
     CottageDetailUpdateSerializer,
     CottageListSerializer,
     ImageUpdateSerializer,
 )
 from relations.models import UserCottageRent, UserCottageReview
-from relations.serializers import UserCottageReviewSerializer
 
 
 class CreateCottageView(generics.CreateAPIView):
-    serializer_class = CottageCreateUpdateSerializer
+    serializer_class = CottageCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -48,8 +47,8 @@ class ListCottageView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Cottage.objects.select_related("category", "town").prefetch_related("images", Prefetch(
-            "reviews", queryset=UserCottageReview.objects.only("cottage", "cottage_rating"))
-        ).annotate(average_rating=Round(Avg("reviews__cottage_rating"), 1))
+            "reviews", queryset=UserCottageReview.objects.only("cottage", "rating"))
+        ).annotate(average_rating=Round(Avg("reviews__rating"), 1))
 
         start_date = self.request.query_params.get('start_date')
         end_date = self.request.query_params.get('end_date')
@@ -75,9 +74,11 @@ class ListCottageView(generics.ListAPIView):
 class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CottageDetailUpdateSerializer
     queryset = Cottage.objects.select_related("town", "category", "owner").prefetch_related("images").annotate(
-        average_rating=Round(Avg("reviews__cottage_rating"), 1),
-        average_cleanliness_rating=Round(Avg("reviews__cleanliness_rating"), 1),
-        average_owner_rating=Round(Avg("reviews__owner_rating"), 1),
+        average_rating=Avg("reviews__rating"),
+        average_location_rating=Avg("reviews__location_rating"),
+        average_cleanliness_rating=Avg("reviews__cleanliness_rating"),
+        average_communication_rating=Avg("reviews__communication_rating"),
+        average_value_rating=Avg("reviews__value_rating"),
     ).all()
     permission_classes = [IsOwnerOrReadOnly]
 

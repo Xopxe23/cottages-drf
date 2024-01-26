@@ -29,27 +29,48 @@ class CottageListSerializer(serializers.ModelSerializer):
                   "beds", "rooms", "average_rating", "images"]
 
 
-class CottageCreateUpdateSerializer(serializers.ModelSerializer):
+class CottageCreateSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     images = CottageImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Cottage
+        fields = [
+            'id', 'town', 'category', "name", "description", 'address', "latitude", "longitude", "price",
+            "guests", "beds", "total_area", "rooms", "images", "parking_places", "check_in_time",
+            "check_out_time", "rules", "amenities",
+        ]
+
+
+class TimeWithoutSecondsField(serializers.TimeField):
+    def to_representation(self, value):
+        if value:
+            formatted_time = value.strftime('%H:%M')
+            return formatted_time
+        return None
+
+
+class CottageDetailUpdateSerializer(CottageCreateSerializer):
     owner = UserFullNameSerializer(read_only=True)
-    average_rating = serializers.FloatField(read_only=True)
-    average_cleanliness_rating = serializers.FloatField(read_only=True)
-    average_owner_rating = serializers.FloatField(read_only=True)
+    town = TownNameSerializer(read_only=True)
+    category = CottageCategorySerializer(read_only=True)
+    check_in_time = TimeWithoutSecondsField()
+    check_out_time = TimeWithoutSecondsField()
+    average_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
+    average_location_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
+    average_cleanliness_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
+    average_communication_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
+    average_value_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
 
     class Meta:
         model = Cottage
         fields = [
             'id', 'town', 'category', "name", "description", 'address', "latitude", "longitude", "price",
             "owner", "guests", "beds", "total_area", "rooms", "images", "parking_places", "check_in_time",
-            "check_out_time", "rules", "amenities", "average_rating", "average_cleanliness_rating",
-            "average_owner_rating"
+            "check_out_time", "rules", "amenities", "average_rating", "average_location_rating",
+            "average_cleanliness_rating", "average_communication_rating", "average_value_rating",
         ]
-
-
-class CottageDetailUpdateSerializer(CottageCreateUpdateSerializer):
-    town = TownNameSerializer(read_only=True)
-    category = CottageCategorySerializer(read_only=True)
+        depth = 1
 
 
 class ImageUpdateSerializer(serializers.ModelSerializer):

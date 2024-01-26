@@ -1,1 +1,254 @@
-[{"model": "relations.usercottagereview", "pk": "1cf5039e-e1d8-480e-a2ae-eebdb50c65db", "fields": {"cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 3, "cleanliness_rating": 3, "owner_rating": 4, "comment": "не такая уж и сказка! обычно! ничего удивительного) но и цена соответствующая"}}, {"model": "relations.usercottagereview", "pk": "207fe69b-3c4a-412f-a036-1845b1ae7a34", "fields": {"cottage": "ed3db795-913e-4e51-80b5-3949f0172caf", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 2, "cleanliness_rating": 5, "owner_rating": 3, "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине."}}, {"model": "relations.usercottagereview", "pk": "208292df-a416-4b77-907b-99b5b1fa7062", "fields": {"cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 4, "cleanliness_rating": 5, "owner_rating": 4, "comment": "Очень хорошо отдохнули! это однозначно стоит своих денег!"}}, {"model": "relations.usercottagereview", "pk": "2de2776f-73ef-41bb-94a4-cb78e85840cc", "fields": {"cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 2, "cleanliness_rating": 3, "owner_rating": 3, "comment": "Метро рядом и необходимые магазины. Питание в гостинице, но могли бы и лучше."}}, {"model": "relations.usercottagereview", "pk": "3cbf2cef-4015-4df9-af1d-df664ae1dad1", "fields": {"cottage": "ed3db795-913e-4e51-80b5-3949f0172caf", "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd", "cottage_rating": 5, "cleanliness_rating": 4, "owner_rating": 4, "comment": "Все было отлично! В жизни все как и на фотках! чисто и приятно!"}}, {"model": "relations.usercottagereview", "pk": "5197c8f1-8071-402b-b962-461b709dfe75", "fields": {"cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 4, "cleanliness_rating": 4, "owner_rating": 3, "comment": "Вполне отличное решение за свои деньги!"}}, {"model": "relations.usercottagereview", "pk": "5b928098-6c04-4f51-8622-7f7f9bf3e9a0", "fields": {"cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902", "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1", "cottage_rating": 2, "cleanliness_rating": 3, "owner_rating": 4, "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине."}}, {"model": "relations.usercottagereview", "pk": "64d12fd0-c6b4-4461-9699-eb2f6ab950b6", "fields": {"cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 4, "cleanliness_rating": 4, "owner_rating": 5, "comment": "Метро рядом и необходимые магазины. Питание в гостинице, но могли бы и лучше."}}, {"model": "relations.usercottagereview", "pk": "6f97c1a4-c487-4439-800a-f59981b95a6f", "fields": {"cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 1, "cleanliness_rating": 1, "owner_rating": 2, "comment": "все было ужасно"}}, {"model": "relations.usercottagereview", "pk": "78585777-6e6f-4d29-8e07-8e3e8c201465", "fields": {"cottage": "b3414e7f-d3f4-4739-844d-a459861a882b", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 5, "cleanliness_rating": 5, "owner_rating": 5, "comment": "было просто замечательно! остались довольны все! приеду еще раз обязательно"}}, {"model": "relations.usercottagereview", "pk": "85624e7f-aa2d-40d7-b6e7-7e9a75abb85f", "fields": {"cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01", "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd", "cottage_rating": 4, "cleanliness_rating": 4, "owner_rating": 4, "comment": "Прекрасный отдых! спасибо хозяину)"}}, {"model": "relations.usercottagereview", "pk": "939fab8e-b1dd-4e5d-9968-665165da45ad", "fields": {"cottage": "b3414e7f-d3f4-4739-844d-a459861a882b", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 4, "cleanliness_rating": 4, "owner_rating": 3, "comment": "Метро рядом и необходимые магазины. Питание в гостинице, но могли бы и лучше."}}, {"model": "relations.usercottagereview", "pk": "9ab1b65e-80c6-449f-82fe-e47932c6a7c0", "fields": {"cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a", "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1", "cottage_rating": 5, "cleanliness_rating": 5, "owner_rating": 5, "comment": "Идеальное решение для семейного уикенда! Всем рекомендую !"}}, {"model": "relations.usercottagereview", "pk": "a17e7488-5756-4b77-b21b-2352a47df7e2", "fields": {"cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 3, "cleanliness_rating": 3, "owner_rating": 4, "comment": "Было неплохо для большой семьи!"}}, {"model": "relations.usercottagereview", "pk": "c1e2f418-4e7c-4e8e-adc9-0903a9a5b948", "fields": {"cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b", "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1", "cottage_rating": 4, "cleanliness_rating": 5, "owner_rating": 4, "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине."}}, {"model": "relations.usercottagereview", "pk": "c97f3caa-038b-425d-8dcc-fd7ef572fc73", "fields": {"cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b", "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1", "cottage_rating": 4, "cleanliness_rating": 3, "owner_rating": 4, "comment": "Все хорошо. Скромные номера, соответствуют стоимости. Видно что номера уже не новые, но все чисто и уютно. В номере тепло. Обслуживание хорошее. Погладили рубашку за 120 руб, как никто ее раньше не гладил))))"}}, {"model": "relations.usercottagereview", "pk": "cc778f6e-13f2-4c14-b6f8-8a2aff2babf5", "fields": {"cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53", "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd", "cottage_rating": 3, "cleanliness_rating": 4, "owner_rating": 3, "comment": "Было достаточно неплохо, все понравилось, но бывало и лучше)"}}, {"model": "relations.usercottagereview", "pk": "d34691b5-5291-4293-a503-6c68f07f065d", "fields": {"cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a", "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0", "cottage_rating": 4, "cleanliness_rating": 2, "owner_rating": 3, "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине."}}]
+[
+  {
+    "model": "relations.usercottagereview",
+    "pk": "1cf5039e-e1d8-480e-a2ae-eebdb50c65db",
+    "fields": {
+      "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 3,
+      "cleanliness_rating": 3,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "не такая уж и сказка! обычно! ничего удивительного) но и цена соответствующая",
+      "rating": "3.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "207fe69b-3c4a-412f-a036-1845b1ae7a34",
+    "fields": {
+      "cottage": "ed3db795-913e-4e51-80b5-3949f0172caf",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 4,
+      "cleanliness_rating": 5,
+      "communication_rating": 5,
+      "value_rating": 5,
+      "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине.",
+      "rating": "4.8"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "208292df-a416-4b77-907b-99b5b1fa7062",
+    "fields": {
+      "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 5,
+      "cleanliness_rating": 5,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Очень хорошо отдохнули! это однозначно стоит своих денег!",
+      "rating": "4.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "2de2776f-73ef-41bb-94a4-cb78e85840cc",
+    "fields": {
+      "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 4,
+      "cleanliness_rating": 4,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Метро рядом и необходимые магазины. Питание в гостинице, но могли бы и лучше.",
+      "rating": "4.0"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "3cbf2cef-4015-4df9-af1d-df664ae1dad1",
+    "fields": {
+      "cottage": "ed3db795-913e-4e51-80b5-3949f0172caf",
+      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "location_rating": 5,
+      "cleanliness_rating": 3,
+      "communication_rating": 5,
+      "value_rating": 5,
+      "comment": "Все было отлично! В жизни все как и на фотках! чисто и приятно!",
+      "rating": "4.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "5197c8f1-8071-402b-b962-461b709dfe75",
+    "fields": {
+      "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 5,
+      "cleanliness_rating": 5,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Вполне отличное решение за свои деньги!",
+      "rating": "4.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "5b928098-6c04-4f51-8622-7f7f9bf3e9a0",
+    "fields": {
+      "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
+      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "location_rating": 5,
+      "cleanliness_rating": 5,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине.",
+      "rating": "4.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "64d12fd0-c6b4-4461-9699-eb2f6ab950b6",
+    "fields": {
+      "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 3,
+      "cleanliness_rating": 3,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Метро рядом и необходимые магазины. Питание в гостинице, но могли бы и лучше.",
+      "rating": "3.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "6f97c1a4-c487-4439-800a-f59981b95a6f",
+    "fields": {
+      "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 2,
+      "cleanliness_rating": 2,
+      "communication_rating": 2,
+      "value_rating": 2,
+      "comment": "все было ужасно",
+      "rating": "2.0"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "78585777-6e6f-4d29-8e07-8e3e8c201465",
+    "fields": {
+      "cottage": "b3414e7f-d3f4-4739-844d-a459861a882b",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 3,
+      "cleanliness_rating": 3,
+      "communication_rating": 3,
+      "value_rating": 3,
+      "comment": "было просто замечательно! остались довольны все! приеду еще раз обязательно",
+      "rating": "3.0"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "85624e7f-aa2d-40d7-b6e7-7e9a75abb85f",
+    "fields": {
+      "cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01",
+      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "location_rating": 5,
+      "cleanliness_rating": 5,
+      "communication_rating": 5,
+      "value_rating": 5,
+      "comment": "Прекрасный отдых! спасибо хозяину)",
+      "rating": "5.0"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "939fab8e-b1dd-4e5d-9968-665165da45ad",
+    "fields": {
+      "cottage": "b3414e7f-d3f4-4739-844d-a459861a882b",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 5,
+      "cleanliness_rating": 5,
+      "communication_rating": 5,
+      "value_rating": 4,
+      "comment": "Метро рядом и необходимые магазины. Питание в гостинице, но могли бы и лучше.",
+      "rating": "4.8"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "9ab1b65e-80c6-449f-82fe-e47932c6a7c0",
+    "fields": {
+      "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
+      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "location_rating": 3,
+      "cleanliness_rating": 3,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Идеальное решение для семейного уикенда! Всем рекомендую !",
+      "rating": "3.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "a17e7488-5756-4b77-b21b-2352a47df7e2",
+    "fields": {
+      "cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 4,
+      "cleanliness_rating": 5,
+      "communication_rating": 4,
+      "value_rating": 5,
+      "comment": "Было неплохо для большой семьи!",
+      "rating": "4.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "c1e2f418-4e7c-4e8e-adc9-0903a9a5b948",
+    "fields": {
+      "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
+      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "location_rating": 5,
+      "cleanliness_rating": 5,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине.",
+      "rating": "4.5"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "c97f3caa-038b-425d-8dcc-fd7ef572fc73",
+    "fields": {
+      "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
+      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "location_rating": 4,
+      "cleanliness_rating": 5,
+      "communication_rating": 3,
+      "value_rating": 5,
+      "comment": "Все хорошо. Скромные номера, соответствуют стоимости. Видно что номера уже не новые, но все чисто и уютно. В номере тепло. Обслуживание хорошее. Погладили рубашку за 120 руб, как никто ее раньше не гладил))))",
+      "rating": "4.2"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "cc778f6e-13f2-4c14-b6f8-8a2aff2babf5",
+    "fields": {
+      "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
+      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "location_rating": 4,
+      "cleanliness_rating": 5,
+      "communication_rating": 4,
+      "value_rating": 4,
+      "comment": "Было достаточно неплохо, все понравилось, но бывало и лучше)",
+      "rating": "4.2"
+    }
+  },
+  {
+    "model": "relations.usercottagereview",
+    "pk": "d34691b5-5291-4293-a503-6c68f07f065d",
+    "fields": {
+      "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "location_rating": 5,
+      "cleanliness_rating": 3,
+      "communication_rating": 4,
+      "value_rating": 3,
+      "comment": "Очень нравится. Для меня важно, чтобы была жизнь в отеле. Чтобы вечером работал ресторан, ресепшен, чтобы были люди. А не аукать в тишине.",
+      "rating": "3.8"
+    }
+  }
+]

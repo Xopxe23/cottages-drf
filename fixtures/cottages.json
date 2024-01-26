@@ -19,8 +19,19 @@
       "parking_places": 2,
       "check_in_time": "12:00:00",
       "check_out_time": "12:00:00",
-      "rules": ["with_children", "with_pets", "parties", "need_documents"],
-      "amenities": ["wifi", "tv", "air_conditioner", "hair_dryer", "electric_kettle"]
+      "rules": [
+        "with_children",
+        "with_pets",
+        "parties",
+        "need_documents"
+      ],
+      "amenities": [
+        "wifi",
+        "tv",
+        "air_conditioner",
+        "hair_dryer",
+        "electric_kettle"
+      ]
     }
   },
   {

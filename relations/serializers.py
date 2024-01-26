@@ -9,4 +9,6 @@ class UserCottageReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserCottageReview
-        fields = ['id', 'user', "cottage_rating", "cleanliness_rating", "owner_rating", "comment"]
+        fields = ['id', 'user', "location_rating", "cleanliness_rating", "communication_rating",
+                  "value_rating", "comment", "rating"]
+        read_only_fields = ["rating", "user"]

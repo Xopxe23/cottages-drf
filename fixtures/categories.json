@@ -1,1 +1,23 @@
-[{"model": "cottages.cottagecategory", "pk": "0b4d73ad-d9a4-4c8b-9e5f-8d78add94210", "fields": {"name": "Апартаменты"}}, {"model": "cottages.cottagecategory", "pk": "0ecf9d18-1586-442b-92c6-81f0d76bd188", "fields": {"name": "Глэмпинг"}}, {"model": "cottages.cottagecategory", "pk": "30feec96-15a4-4302-9900-4557a17e9a73", "fields": {"name": "Коттедж"}}]
+[
+  {
+    "model": "cottages.cottagecategory",
+    "pk": "0b4d73ad-d9a4-4c8b-9e5f-8d78add94210",
+    "fields": {
+      "name": "Апартаменты"
+    }
+  },
+  {
+    "model": "cottages.cottagecategory",
+    "pk": "0ecf9d18-1586-442b-92c6-81f0d76bd188",
+    "fields": {
+      "name": "Глэмпинг"
+    }
+  },
+  {
+    "model": "cottages.cottagecategory",
+    "pk": "30feec96-15a4-4302-9900-4557a17e9a73",
+    "fields": {
+      "name": "Коттедж"
+    }
+  }
+]

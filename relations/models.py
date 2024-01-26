@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.db.models import F
 
 from cottages.models import Cottage
 from users.models import User
@@ -17,12 +18,18 @@ class UserCottageReview(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="reviews", verbose_name="Коттедж")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews", verbose_name="Пользователь")
-    cottage_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг коттеджа")
+    location_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг местоположения")
     cleanliness_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг чистоты")
-    owner_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг хозяина")
+    communication_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг общения")
+    value_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Соотношение цена/качество")
     comment = models.TextField(verbose_name="Отзыв")
-    # created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
-    # updated_at = models.DateTimeField(auto_now_add=True, verbose_name='Обновлено')
+    rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, null=True, editable=False)
+
+    def save(self, *args, **kwargs):
+        ratings_sum = self.location_rating + self.cleanliness_rating + self.communication_rating + self.value_rating
+        avg_rating = ratings_sum / 4.0
+        self.rating = avg_rating
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Отзыв коттеджа'
