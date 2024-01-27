@@ -1,6 +1,8 @@
+from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
 from cottages.models import Cottage, CottageCategory, CottageImage
+from relations.models import UserCottageRent
 from towns.serializers import TownNameSerializer
 from users.serializers import UserFullNameSerializer
 
@@ -61,6 +63,7 @@ class CottageDetailUpdateSerializer(CottageCreateSerializer):
     average_cleanliness_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
     average_communication_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
     average_value_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
+    occupied_dates = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Cottage
@@ -68,9 +71,18 @@ class CottageDetailUpdateSerializer(CottageCreateSerializer):
             'id', 'town', 'category', "name", "description", 'address', "latitude", "longitude", "price",
             "owner", "guests", "beds", "total_area", "rooms", "images", "parking_places", "check_in_time",
             "check_out_time", "rules", "amenities", "average_rating", "average_location_rating",
-            "average_cleanliness_rating", "average_communication_rating", "average_value_rating",
+            "average_cleanliness_rating", "average_communication_rating", "average_value_rating", "occupied_dates"
         ]
-        depth = 1
+
+    def get_occupied_dates(self, obj):
+        all_dates = UserCottageRent.objects.filter(cottage=obj.pk).values_list('start_date', 'end_date')
+        all_dates_list = []
+        for start_date, end_date in all_dates:
+            current_date = start_date
+            while current_date <= end_date:
+                all_dates_list.append(current_date)
+                current_date += relativedelta(days=1)
+        return all_dates_list
 
 
 class ImageUpdateSerializer(serializers.ModelSerializer):

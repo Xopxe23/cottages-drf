@@ -73,14 +73,17 @@ class ListCottageView(generics.ListAPIView):
 
 class RetrieveUpdateDestroyCottageView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CottageDetailUpdateSerializer
-    queryset = Cottage.objects.select_related("town", "category", "owner").prefetch_related("images").annotate(
-        average_rating=Avg("reviews__rating"),
-        average_location_rating=Avg("reviews__location_rating"),
-        average_cleanliness_rating=Avg("reviews__cleanliness_rating"),
-        average_communication_rating=Avg("reviews__communication_rating"),
-        average_value_rating=Avg("reviews__value_rating"),
-    ).all()
     permission_classes = [IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Cottage.objects.select_related("town", "category", "owner").prefetch_related("images").annotate(
+            average_rating=Avg("reviews__rating"),
+            average_location_rating=Avg("reviews__location_rating"),
+            average_cleanliness_rating=Avg("reviews__cleanliness_rating"),
+            average_communication_rating=Avg("reviews__communication_rating"),
+            average_value_rating=Avg("reviews__value_rating"),
+        ).all()
+        return queryset
 
 
 class UpdateCottageImageOrder(APIView):
