@@ -30,6 +30,12 @@ class CottageListSerializer(serializers.ModelSerializer):
         fields = ['id', 'town', 'category', "name", "price", "guests", "total_area",
                   "beds", "rooms", "average_rating", "images"]
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Round the float to one decimal place
+        data['average_rating'] = round(float(data['average_rating']), 1)
+        return data
+
 
 class CottageCreateSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
@@ -73,6 +79,16 @@ class CottageDetailUpdateSerializer(CottageCreateSerializer):
             "check_out_time", "rules", "amenities", "average_rating", "average_location_rating",
             "average_cleanliness_rating", "average_communication_rating", "average_value_rating", "occupied_dates"
         ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Round the float to one decimal place
+        data['average_rating'] = round(float(data['average_rating']), 1)
+        data['average_location_rating'] = round(float(data['average_location_rating']), 1)
+        data['average_cleanliness_rating'] = round(float(data['average_cleanliness_rating']), 1)
+        data['average_communication_rating'] = round(float(data['average_communication_rating']), 1)
+        data['average_value_rating'] = round(float(data['average_value_rating']), 1)
+        return data
 
     def get_occupied_dates(self, obj):
         all_dates = UserCottageRent.objects.filter(cottage=obj.pk).values_list('start_date', 'end_date')
