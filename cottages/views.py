@@ -61,9 +61,8 @@ class ListCottageView(generics.ListAPIView):
                 return queryset
 
             booked_cottages_subquery = UserCottageRent.objects.filter(
-                Q(start_date__range=[start_date, end_date]) | Q(end_date__range=[
-                    start_date, end_date
-                ]) | (Q(start_date__lte=start_date) & Q(end_date__gte=end_date))
+                Q(start_date__gte=start_date, start_date__lt=end_date) |
+                Q(start_date__lte=start_date, end_date__gt=start_date)
             ).values_list('cottage')
 
             queryset = queryset.exclude(id__in=booked_cottages_subquery)

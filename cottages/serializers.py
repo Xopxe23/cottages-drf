@@ -92,13 +92,15 @@ class CottageDetailUpdateSerializer(CottageCreateSerializer):
 
     def get_occupied_dates(self, obj):
         all_dates = UserCottageRent.objects.filter(cottage=obj.pk).values_list('start_date', 'end_date')
-        all_dates_list = []
+        closed_days = []
+        start_days = []
         for start_date, end_date in all_dates:
-            current_date = start_date
-            while current_date <= end_date:
-                all_dates_list.append(current_date)
+            start_days.append(start_date)
+            current_date = start_date + relativedelta(days=1)
+            while current_date < end_date:
+                closed_days.append(current_date)
                 current_date += relativedelta(days=1)
-        return all_dates_list
+        return {"closed_days": closed_days, "start_days": start_days}
 
 
 class ImageUpdateSerializer(serializers.ModelSerializer):
