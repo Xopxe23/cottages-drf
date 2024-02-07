@@ -1,8 +1,7 @@
-from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
 from cottages.models import Cottage, CottageCategory, CottageImage
-from relations.models import UserCottageRent
+from cottages.services import occupied_dates, round_ratings
 from towns.serializers import TownNameSerializer
 from users.serializers import UserFullNameSerializer
 
@@ -32,7 +31,6 @@ class CottageListSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # Round the float to one decimal place
         data['average_rating'] = round(float(data['average_rating']), 1)
         return data
 
@@ -80,27 +78,12 @@ class CottageDetailUpdateSerializer(CottageCreateSerializer):
             "average_cleanliness_rating", "average_communication_rating", "average_value_rating", "occupied_dates"
         ]
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> dict:
         data = super().to_representation(instance)
-        # Round the float to one decimal place
-        data['average_rating'] = round(float(data['average_rating']), 1)
-        data['average_location_rating'] = round(float(data['average_location_rating']), 1)
-        data['average_cleanliness_rating'] = round(float(data['average_cleanliness_rating']), 1)
-        data['average_communication_rating'] = round(float(data['average_communication_rating']), 1)
-        data['average_value_rating'] = round(float(data['average_value_rating']), 1)
-        return data
+        return round_ratings(data)
 
-    def get_occupied_dates(self, obj):
-        all_dates = UserCottageRent.objects.filter(cottage=obj.pk).values_list('start_date', 'end_date')
-        closed_days = []
-        start_days = []
-        for start_date, end_date in all_dates:
-            start_days.append(start_date)
-            current_date = start_date + relativedelta(days=1)
-            while current_date < end_date:
-                closed_days.append(current_date)
-                current_date += relativedelta(days=1)
-        return {"closed_days": closed_days, "start_days": start_days}
+    def get_occupied_dates(self, obj: Cottage) -> dict:
+        return occupied_dates(obj.pk)
 
 
 class ImageUpdateSerializer(serializers.ModelSerializer):

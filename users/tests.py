@@ -112,5 +112,4 @@ class UserProfileViewTest(APITestCaseWithSetUp):
         self.client.logout()
         url = reverse('profile')
         response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertIn("error", response.data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

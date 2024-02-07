@@ -1,11 +1,11 @@
-from django.db.models import Q
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from cottages.permissions import IsAuthorOrReadOnly
-from relations.models import UserCottageRent, UserCottageReview
+from relations.models import UserCottageReview
 from relations.serializers import UserCottageRentSerializer, UserCottageReviewSerializer
+from relations.services import is_cottage_available
 
 
 class ListUserCottageReviewView(generics.ListCreateAPIView):
@@ -37,16 +37,7 @@ class CreateUserCottageRent(generics.CreateAPIView):
         start_date = serializer.validated_data['start_date']
         end_date = serializer.validated_data['end_date']
 
-        if self.is_cottage_available(cottage_id, start_date, end_date):
+        if is_cottage_available(cottage_id, start_date, end_date):
             serializer.save(user=user, cottage_id=cottage_id)
         else:
             raise ValidationError("Коттедж занят в указанный период")
-
-    def is_cottage_available(self, cottage_id, start_date, end_date):
-        existing_rents = UserCottageRent.objects.filter(cottage_id=cottage_id)
-        is_available = not existing_rents.filter(
-            Q(start_date__gte=start_date, start_date__lt=end_date) |
-            Q(start_date__lte=start_date, end_date__gt=start_date)
-        ).exists()
-
-        return is_available

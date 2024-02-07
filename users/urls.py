@@ -1,20 +1,20 @@
 from django.urls import include, path
 
 from users.views import (
-    EmailVerificationRequestView,
-    EmailVerificationView,
-    LoginView,
-    LogoutView,
-    RegisterUserView,
-    UserProfileView,
+    email_verification_request_view,
+    email_verification_view,
+    login_view,
+    logout_view,
+    register_user_view,
+    user_profile_view,
 )
 
 urlpatterns = [
-    path("register/", RegisterUserView.as_view(), name="register"),
-    path('login/', LoginView.as_view(), name='login'),
+    path("register/", register_user_view, name="register"),
+    path('login/', login_view, name='login'),
     path('', include('social_django.urls')),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('me/', UserProfileView.as_view(), name='profile'),
-    path('request-verify/', EmailVerificationRequestView.as_view(), name="request-verify"),
-    path('verify/', EmailVerificationView.as_view(), name="verify"),
+    path('logout/', logout_view, name='logout'),
+    path('me/', user_profile_view, name='profile'),
+    path('request-verify/', email_verification_request_view, name="request-verify"),
+    path('verify/', email_verification_view, name="verify"),
 ]
