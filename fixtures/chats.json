@@ -1,0 +1,35 @@
+[
+  {
+    "model": "chats.chat",
+    "pk": "1b4503b8-2ab8-43d4-a855-6906a45dab3e",
+    "fields": {
+      "last_message": "771a5969-bada-4fba-b7ff-f3429fa19ea5",
+      "users": [
+        "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+        "e5880aea-2fcd-4880-9b76-f371dee1bffd"
+      ]
+    }
+  },
+  {
+    "model": "chats.chat",
+    "pk": "649be0a7-24ab-42fd-b38c-71b92a3abf58",
+    "fields": {
+      "last_message": "795fcc14-db9f-4c84-b6b0-1c36d3417e12",
+      "users": [
+        "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+        "e5880aea-2fcd-4880-9b76-f371dee1bffd"
+      ]
+    }
+  },
+  {
+    "model": "chats.chat",
+    "pk": "e547bbf7-35d5-446c-ae54-03657dca1253",
+    "fields": {
+      "last_message": "76505203-3774-4f5e-9bfb-cba06e59add7",
+      "users": [
+        "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+        "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1"
+      ]
+    }
+  }
+]

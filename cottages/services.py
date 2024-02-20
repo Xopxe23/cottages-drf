@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from dateutil.relativedelta import relativedelta
+from django.db.models import Max
 
 from relations.models import UserCottageRent
 
@@ -27,3 +28,11 @@ def round_ratings(data: dict) -> dict:
     data['average_communication_rating'] = round(float(data['average_communication_rating']), 1)
     data['average_value_rating'] = round(float(data['average_value_rating']), 1)
     return data
+
+
+def update_image_order(image, new_order: int, max_order: int):
+    """ Update the order of an image. """
+    if new_order > max_order:
+        image.bottom()
+    else:
+        image.to(new_order)

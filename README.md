@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ```
 ```
-./manage.py loaddata fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json  fixtures/towns.json fixtures/users.json
+./manage.py loaddata fixtures/categories.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json  fixtures/towns.json fixtures/users.json fixtures/chats.json fixtures/messages.json
 
 ```
 

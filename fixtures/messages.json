@@ -1,0 +1,62 @@
+[
+  {
+    "fields": {
+      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "chat": "649be0a7-24ab-42fd-b38c-71b92a3abf58",
+      "content": "Сам пошел нахуй!",
+      "timestamp": "2024-02-15T17:52:31.655"
+    },
+    "model": "chats.message",
+    "pk": "595c4225-7d2a-461b-a249-3e890c88ec2d"
+  },
+  {
+    "model": "chats.message",
+    "pk": "76505203-3774-4f5e-9bfb-cba06e59add7",
+    "fields": {
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "chat": "649be0a7-24ab-42fd-b38c-71b92a3abf58",
+      "content": "andfdnfadsf",
+      "timestamp": "2024-02-15T17:52:04.326"
+    }
+  },
+  {
+    "model": "chats.message",
+    "pk": "771a5969-bada-4fba-b7ff-f3429fa19ea5",
+    "fields": {
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "chat": "649be0a7-24ab-42fd-b38c-71b92a3abf58",
+      "content": "fadflnads;fn;adf",
+      "timestamp": "2024-02-15T17:52:17.102"
+    }
+  },
+  {
+    "model": "chats.message",
+    "pk": "795fcc14-db9f-4c84-b6b0-1c36d3417e12",
+    "fields": {
+      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "chat": "649be0a7-24ab-42fd-b38c-71b92a3abf58",
+      "content": "fadfafadf",
+      "timestamp": "2024-02-15T17:52:10.399"
+    }
+  },
+  {
+    "model": "chats.message",
+    "pk": "97e6d607-64d5-4b3c-b1a3-976af6150501",
+    "fields": {
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "chat": "649be0a7-24ab-42fd-b38c-71b92a3abf58",
+      "content": "пошел нахуй",
+      "timestamp": "2024-02-15T17:52:23.626"
+    }
+  },
+  {
+    "model": "chats.message",
+    "pk": "9cb294f6-49ae-4bc1-b517-bd514b9d611f",
+    "fields": {
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "chat": "e547bbf7-35d5-446c-ae54-03657dca1253",
+      "content": "vczvcn",
+      "timestamp": "2024-02-15T17:51:53.624"
+    }
+  }
+]

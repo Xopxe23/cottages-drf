@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedSimpleRouter
 
-from .views import TownAttractionViewSet, TownViewSet, UpdateAttractionImageOrder, UpdateTownImageOrder
+from .views import TownAttractionViewSet, TownViewSet, update_attraction_image_order, update_town_image_order
 
 router = DefaultRouter()
 router.register(r'', TownViewSet, basename='towns')
@@ -13,6 +13,6 @@ attractions_router.register(r'attractions', TownAttractionViewSet, basename='att
 urlpatterns = router.urls + attractions_router.urls
 
 urlpatterns += [
-    path('images/change_order/', UpdateTownImageOrder.as_view(), name='images-update'),
-    path('attractions/images/change_order/', UpdateAttractionImageOrder.as_view(), name='images-update')
+    path('images/change_order/', update_town_image_order, name='images-update'),
+    path('attractions/images/change_order/', update_attraction_image_order, name='images-update')
 ]

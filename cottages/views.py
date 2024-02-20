@@ -18,6 +18,7 @@ from cottages.serializers import (
     CottageListSerializer,
     ImageUpdateSerializer,
 )
+from cottages.services import update_image_order
 from relations.models import UserCottageRent, UserCottageReview
 
 
@@ -95,10 +96,7 @@ def update_cottage_image_order(request, *args, **kwargs):
         except CottageImage.DoesNotExist:
             return Response({"error": "Image not found"}, status=status.HTTP_404_NOT_FOUND)
         max_order = image.cottage.images.aggregate(Max('order'))['order__max']
-        if new_order > max_order:
-            image.bottom()
-        else:
-            image.to(new_order)
+        update_image_order(image, new_order, max_order)
     else:
         return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     return Response({"success": "Order updated successfully"}, status=status.HTTP_200_OK)

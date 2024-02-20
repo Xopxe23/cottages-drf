@@ -20,9 +20,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include("users.urls")),
+    path('auth/', include('users.urls')),
     path('cottages/', include("cottages.urls")),
     path('towns/', include("towns.urls")),
+    path('chats/', include('chats.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
