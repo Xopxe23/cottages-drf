@@ -44,9 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
 
     'channels',
@@ -75,7 +72,6 @@ MIDDLEWARE = [
     'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',
 
     "corsheaders.middleware.CorsMiddleware",
-    "users.authenticate.EnforceCSRFMiddleware"
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -235,7 +231,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'users.authenticate.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     )
 }
 
@@ -247,23 +243,3 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "TOKEN_OBTAIN_SERIALIZER": "users.serializers.MyTokenObtainPairSerializer",
-
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-
-    'AUTH_ACCESS_COOKIE': 'access_token',
-    'AUTH_REFRESH_COOKIE': 'refresh_token',
-    'AUTH_COOKIE_DOMAIN': None,
-    'AUTH_COOKIE_SECURE': False,
-    'AUTH_COOKIE_HTTP_ONLY': True,
-    'AUTH_COOKIE_PATH': '/',
-    'AUTH_COOKIE_SAMESITE': 'Lax',
-}

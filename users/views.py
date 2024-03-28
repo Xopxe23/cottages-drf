@@ -1,7 +1,7 @@
 import datetime
 
-from django.contrib.auth import authenticate
-from django.middleware import csrf
+from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import ensure_csrf_cookie
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -9,9 +9,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from users.models import EmailVerification, User
+from users.models import EmailVerification
 from users.serializers import UserSerializer
-from users.services import create_email_verification, get_response_with_cookies, parse_token
+from users.services import create_email_verification
 from users.tasks import send_email_verification
 
 
@@ -49,36 +49,21 @@ def register_user_view(request):
     ),
 )
 @api_view(['POST'])
+@ensure_csrf_cookie
 def login_view(request):
     email = request.data.get('email')
     password = request.data.get('password')
     user = authenticate(request, email=email, password=password)
     if user:
-        response = get_response_with_cookies(user)
-        csrf.get_token(request)
-        response.data = ({'success': 'Logged in'})
-        response.status_code = status.HTTP_200_OK
-        return response
+        login(request, user)
+        return Response({'success': 'Logged in'}, status=status.HTTP_200_OK)
     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])
-def refresh_tokens_view(request):
-    refresh_token = request.COOKIES.get('refresh_token')
-    if not refresh_token:
-        return UserSerializer({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
-    data = parse_token(refresh_token)
-    if "user_id" in data:
-        user = User.objects.filter(id=data["user_id"]).first()
-        if not user:
-            return Response({"error": "User don't exists"}, status.HTTP_400_BAD_REQUEST)
-        response = get_response_with_cookies(user)
-        csrf.get_token(request)
-        response.data = ({'success': 'Tokens updated'})
-        response.status_code = status.HTTP_200_OK
-        return response
-    else:
-        return Response({"error": data["error"]}, status.HTTP_400_BAD_REQUEST)
+def logout_view(request):
+    logout(request)
+    return Response({'success': 'Logged out'}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
