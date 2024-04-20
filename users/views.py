@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.models import EmailVerification
-from users.serializers import UserSerializer
+from users.serializers import UserFullNameSerializer, UserSerializer
 from users.services import create_email_verification
 from users.tasks import send_email_verification
 
@@ -24,17 +24,7 @@ def register_user_view(request):
     serializer = UserSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    user = serializer.instance
-    response_data = {
-        'user_id': user.id,
-        'email': user.email,
-        'phone_number': user.phone_number,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'is_active': user.is_active,
-        'is_staff': user.is_staff,
-    }
-    return Response(response_data, status=status.HTTP_201_CREATED)
+    return Response({'success': 'Registration complete'}, status=status.HTTP_201_CREATED)
 
 
 @swagger_auto_schema(
@@ -74,6 +64,20 @@ def user_profile_view(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    methods=["put", "patch"],
+    request_body=UserFullNameSerializer,
+)
+@api_view(['PUT', "PATCH"])
+@permission_classes([IsAuthenticated])
+def user_update_profile_view(request):
+    serializer = UserFullNameSerializer(request.user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def email_verification_request_view(request):
@@ -81,11 +85,21 @@ def email_verification_request_view(request):
     EmailVerification.objects.filter(user=user).delete()
     if request.user.is_verified:
         return Response({"error": "You're already verified"}, status=status.HTTP_200_OK)
-    email_verification = create_email_verification(user.pk)
+    email_verification = create_email_verification(user)
     send_email_verification.delay(user.pk, email_verification.pk)
     return Response({"success": "Check your email"}, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method="post",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'code': openapi.Schema(type=openapi.TYPE_STRING)
+        },
+        required=['code'],
+    ),
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def email_verification_view(request):

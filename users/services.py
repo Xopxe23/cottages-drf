@@ -1,11 +1,10 @@
 import datetime
-from uuid import UUID
 
-from users.models import EmailVerification
+from users.models import EmailVerification, User
 
 
-def create_email_verification(user_id: UUID) -> EmailVerification:
+def create_email_verification(user: User) -> EmailVerification:
     """Create email verification for current user"""
     expiration = datetime.datetime.now() + datetime.timedelta(hours=48)
-    email_verification = EmailVerification.objects.create(user=user_id, expiration=expiration)
+    email_verification = EmailVerification.objects.create(user=user, expiration=expiration)
     return email_verification
