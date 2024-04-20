@@ -32,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, blank=True, verbose_name="Фамилия")
     is_active = models.BooleanField(default=True, verbose_name="Активен")
     is_verified = models.BooleanField(default=False, verbose_name="Верифицирован")
+    is_rentier = models.BooleanField(default=False, verbose_name="Арендодатель")
     is_staff = models.BooleanField(default=False, verbose_name="Сотрудник")
 
     objects = UserManager()

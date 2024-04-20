@@ -5,6 +5,7 @@
     "fields": {
       "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
       "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "status": 1,
       "start_date": "2024-01-16",
       "end_date": "2024-01-18"
     }
@@ -15,6 +16,7 @@
     "fields": {
       "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
       "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "status": 1,
       "start_date": "2024-01-02",
       "end_date": "2024-01-04"
     }
@@ -25,6 +27,7 @@
     "fields": {
       "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2024-01-15",
       "end_date": "2024-01-17"
     }
@@ -35,6 +38,7 @@
     "fields": {
       "cottage": "ed3db795-913e-4e51-80b5-3949f0172caf",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2024-01-01",
       "end_date": "2024-01-02"
     }
@@ -45,6 +49,7 @@
     "fields": {
       "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
       "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "status": 1,
       "start_date": "2024-01-12",
       "end_date": "2024-01-16"
     }
@@ -55,6 +60,7 @@
     "fields": {
       "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2023-12-15",
       "end_date": "2023-12-19"
     }
@@ -65,17 +71,8 @@
     "fields": {
       "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2024-01-02",
-      "end_date": "2024-01-06"
-    }
-  },
-  {
-    "model": "relations.usercottagerent",
-    "pk": "90857c9e-417e-4035-ada4-5894f3584cf9",
-    "fields": {
-      "cottage": "ed3db795-913e-4e51-80b5-3949f0172caf",
-      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
-      "start_date": "2024-01-04",
       "end_date": "2024-01-06"
     }
   },
@@ -85,6 +82,7 @@
     "fields": {
       "cottage": "b3414e7f-d3f4-4739-844d-a459861a882b",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2024-01-03",
       "end_date": "2024-01-07"
     }
@@ -95,6 +93,7 @@
     "fields": {
       "cottage": "ed3db795-913e-4e51-80b5-3949f0172caf",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2024-01-23",
       "end_date": "2024-01-25"
     }
@@ -105,8 +104,20 @@
     "fields": {
       "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
+      "status": 1,
       "start_date": "2024-01-09",
       "end_date": "2024-01-23"
+    }
+  },
+  {
+    "model": "relations.usercottagerent",
+    "pk": "dcd82cc2-f506-4c9c-88ee-ee4f3e9f9190",
+    "fields": {
+      "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
+      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "status": 2,
+      "start_date": "2024-03-20",
+      "end_date": "2024-03-21"
     }
   }
 ]

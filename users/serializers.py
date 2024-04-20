@@ -6,14 +6,15 @@ from users.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    is_active = serializers.CharField(read_only=True)
-    is_verified = serializers.CharField(read_only=True)
-    is_staff = serializers.CharField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+    is_rentier = serializers.BooleanField(read_only=True)
+    is_verified = serializers.BooleanField(read_only=True)
+    is_staff = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
         fields = ['id', 'email', 'password', 'phone_number', 'first_name', 'last_name',
-                  'is_active', 'is_verified', 'is_staff']
+                  'is_active', 'is_verified', "is_rentier", 'is_staff']
 
     def create(self, validated_data):
         password = validated_data.pop("password")

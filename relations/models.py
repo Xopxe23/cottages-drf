@@ -1,7 +1,6 @@
 import uuid
 
 from django.db import models
-from django.db.models import F
 
 from cottages.models import Cottage
 from users.models import User
@@ -23,7 +22,7 @@ class UserCottageReview(models.Model):
     communication_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг общения")
     value_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Соотношение цена/качество")
     comment = models.TextField(verbose_name="Отзыв")
-    rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, null=True, editable=False)
+    rating = models.FloatField(blank=True, null=True, editable=False)
 
     def save(self, *args, **kwargs):
         ratings_sum = self.location_rating + self.cleanliness_rating + self.communication_rating + self.value_rating
@@ -53,9 +52,16 @@ class UserCottageLike(models.Model):
 
 
 class UserCottageRent(models.Model):
+    STATUS_CHOICES = [
+        (1, 'Забронирован'),
+        (2, 'Оплачен'),
+        (3, 'Отказ'),
+        (3, 'Подтвержден'),
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="rents", verbose_name="Коттедж")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rents", verbose_name="Пользователь")
+    status = models.IntegerField(choices=STATUS_CHOICES, verbose_name="Статус")
     start_date = models.DateField(verbose_name="Дата заезда")
     end_date = models.DateField(verbose_name="Дата выезда")
 

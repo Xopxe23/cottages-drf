@@ -11,6 +11,7 @@
       "first_name": "George",
       "last_name": "Dudaev",
       "is_active": true,
+      "is_rentier": true,
       "is_staff": false,
       "groups": [],
       "user_permissions": []
@@ -28,6 +29,7 @@
       "first_name": "Test",
       "last_name": "Testov",
       "is_active": true,
+      "is_rentier": true,
       "is_staff": false,
       "groups": [],
       "user_permissions": []
@@ -45,6 +47,7 @@
       "first_name": "Admin",
       "last_name": "Adminov",
       "is_active": true,
+      "is_rentier": true,
       "is_staff": true,
       "groups": [],
       "user_permissions": []

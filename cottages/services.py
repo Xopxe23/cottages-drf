@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from dateutil.relativedelta import relativedelta
-from django.db.models import Max
 
 from relations.models import UserCottageRent
 
