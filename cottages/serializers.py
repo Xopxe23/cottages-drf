@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from cottages.models import Cottage, CottageCategory, CottageImage
-from cottages.services import occupied_dates, round_ratings
+from cottages.services import get_occupied_dates, round_ratings
 from towns.serializers import TownNameSerializer
 from users.serializers import UserFullNameSerializer
 
@@ -82,8 +82,9 @@ class CottageDetailUpdateSerializer(CottageCreateSerializer):
         data = super().to_representation(instance)
         return round_ratings(data)
 
-    def get_occupied_dates(self, obj: Cottage) -> dict:
-        return occupied_dates(obj.pk)
+    @staticmethod
+    def get_occupied_dates(obj: Cottage) -> dict:
+        return get_occupied_dates(obj.pk)
 
 
 class ImageUpdateSerializer(serializers.ModelSerializer):

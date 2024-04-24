@@ -3,7 +3,7 @@ from uuid import UUID
 
 from django.db.models import Q
 
-from relations.models import UserCottageRent
+from relations.models import UserCottageLike, UserCottageRent
 
 
 def is_cottage_available(cottage_id: UUID, start_date, end_date: datetime.date) -> bool:
@@ -15,3 +15,9 @@ def is_cottage_available(cottage_id: UUID, start_date, end_date: datetime.date) 
     ).exists()
 
     return is_available
+
+
+def get_liked_cottages_ids(user) -> list[UUID]:
+    """Return a list of IDs of cottages liked by the user"""
+    liked_cottages_list = UserCottageLike.objects.filter(user=user).values_list('cottage_id', flat=True)
+    return list(liked_cottages_list)

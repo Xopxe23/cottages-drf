@@ -1,11 +1,31 @@
 from uuid import UUID
 
 from dateutil.relativedelta import relativedelta
+from django.db.models import Avg, Prefetch, Q, QuerySet
+from django.db.models.functions import Round
 
-from relations.models import UserCottageRent
+from cottages.models import Cottage
+from relations.models import UserCottageRent, UserCottageReview
 
 
-def occupied_dates(cottage_id: UUID) -> dict:
+def get_cottages_list(**filter_by) -> QuerySet[Cottage]:
+    """Return cottages with annotated rating"""
+    cottages = Cottage.objects.filter(**filter_by).select_related("category", "town").prefetch_related(
+        "images", Prefetch("reviews", queryset=UserCottageReview.objects.only("cottage", "rating"))
+    ).annotate(average_rating=Round(Avg("reviews__rating"), 1))
+    return cottages
+
+
+def get_booked_cottages_ids(start_date, end_date: str) -> QuerySet[Cottage]:
+    """Return id's of booked cottages on current dates"""
+    booked_cottages = UserCottageRent.objects.filter(
+        Q(start_date__gte=start_date, start_date__lt=end_date) |
+        Q(start_date__lte=start_date, end_date__gt=start_date)
+    ).values_list('cottage')
+    return booked_cottages
+
+
+def get_occupied_dates(cottage_id: UUID) -> dict:
     """Return occupied days of cottage"""
     all_dates = UserCottageRent.objects.filter(cottage=cottage_id).values_list('start_date', 'end_date')
     closed_days = []

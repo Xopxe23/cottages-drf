@@ -1,5 +1,3 @@
-from django.db.models import Avg, Prefetch, Subquery
-from django.db.models.functions import Round
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -8,9 +6,10 @@ from rest_framework.response import Response
 from cottages.models import Cottage
 from cottages.permissions import IsAuthorOrReadOnly
 from cottages.serializers import CottageCreateSerializer, CottageListSerializer
+from cottages.services import get_cottages_list
 from relations.models import UserCottageLike, UserCottageRent, UserCottageReview
 from relations.serializers import UserCottageRentSerializer, UserCottageReviewSerializer
-from relations.services import is_cottage_available
+from relations.services import get_liked_cottages_ids, is_cottage_available
 
 
 class ListUserCottageReviewView(generics.ListCreateAPIView):
@@ -82,12 +81,8 @@ def add_or_remove_favorites(request, cottage_id):
 @permission_classes([IsAuthenticated])
 def get_current_user_favorites(request):
     user = request.user
-    liked_cottages_list_id = UserCottageLike.objects.filter(user=user).values('cottage_id')
-    liked_cottages = Cottage.objects.filter(pk__in=Subquery(liked_cottages_list_id)).select_related(
-        "category", "town"
-    ).prefetch_related("images", Prefetch("reviews", queryset=UserCottageReview.objects.only(
-        "cottage", "rating"))).annotate(
-        average_rating=Round(Avg("reviews__rating"), 1))
+    liked_cottages_list_id = get_liked_cottages_ids(user)
+    liked_cottages = get_cottages_list(pk__in=liked_cottages_list_id)
     serializer = CottageListSerializer(liked_cottages, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from django.db.models import Avg, Max, Prefetch, Q
-from django.db.models.functions import Round
+from django.db.models import Avg, Max
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
@@ -18,8 +17,7 @@ from cottages.serializers import (
     CottageListSerializer,
     ImageUpdateSerializer,
 )
-from cottages.services import update_image_order
-from relations.models import UserCottageRent, UserCottageReview
+from cottages.services import get_booked_cottages_ids, get_cottages_list, update_image_order
 
 
 class CreateCottageView(generics.CreateAPIView):
@@ -46,10 +44,7 @@ class ListCottageView(generics.ListAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        queryset = Cottage.objects.select_related("category", "town").prefetch_related("images", Prefetch(
-            "reviews", queryset=UserCottageReview.objects.only("cottage", "rating"))
-        ).annotate(average_rating=Round(Avg("reviews__rating"), 1))
-
+        queryset = get_cottages_list()
         start_date = self.request.query_params.get('start_date')
         end_date = self.request.query_params.get('end_date')
         if start_date and end_date:
@@ -58,11 +53,8 @@ class ListCottageView(generics.ListAPIView):
                 datetime.strptime(end_date, '%Y-%m-%d')
             except ValueError:
                 return queryset
-            booked_cottages_subquery = UserCottageRent.objects.filter(
-                Q(start_date__gte=start_date, start_date__lt=end_date) |
-                Q(start_date__lte=start_date, end_date__gt=start_date)
-            ).values_list('cottage')
-            queryset = queryset.exclude(id__in=booked_cottages_subquery)
+            booked_cottages = get_booked_cottages_ids(start_date, end_date)
+            queryset = queryset.exclude(id__in=booked_cottages)
         return queryset
 
 
