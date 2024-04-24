@@ -6,8 +6,9 @@ from users.views import (
     login_view,
     logout_view,
     register_user_view,
+    update_password_view,
+    update_profile_view,
     user_profile_view,
-    user_update_profile_view,
 )
 
 urlpatterns = [
@@ -15,7 +16,8 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('me/', user_profile_view, name='profile'),
-    path('me/update/', user_update_profile_view, name='update-profile'),
+    path('update-info/', update_profile_view, name='profile-update'),
+    path('update-password/', update_password_view, name='password-update'),
     path('', include('social_django.urls')),
     path('request-verify/', email_verification_request_view, name="request-verify"),
     path('verify/', email_verification_view, name="verify")

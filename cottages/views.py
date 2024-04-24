@@ -14,7 +14,7 @@ from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import (
     CottageCreateSerializer,
     CottageDetailUpdateSerializer,
-    CottageListSerializer,
+    CottageInfoWithRatingSerializer,
     ImageUpdateSerializer,
 )
 from cottages.services import get_booked_cottages_ids, get_cottages_list, update_image_order
@@ -36,7 +36,7 @@ class CreateCottageView(generics.CreateAPIView):
 
 
 class ListCottageView(generics.ListAPIView):
-    serializer_class = CottageListSerializer
+    serializer_class = CottageInfoWithRatingSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ["name"]
     ordering_fields = ["price", "average_rating"]

@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.models import EmailVerification
-from users.serializers import UserFullNameSerializer, UserSerializer, UserUpdateInfoSerializer
+from users.serializers import UserPasswordUpdateSerializer, UserSerializer, UserUpdateInfoSerializer
 from users.services import create_email_verification
 from users.tasks import send_email_verification
 
@@ -43,6 +43,7 @@ def register_user_view(request):
 def login_view(request):
     email = request.data.get('email')
     password = request.data.get('password')
+    email = email.lower()
     user = authenticate(request, email=email, password=password)
     if user:
         login(request, user)
@@ -70,12 +71,32 @@ def user_profile_view(request):
 )
 @api_view(['PUT', "PATCH"])
 @permission_classes([IsAuthenticated])
-def user_update_profile_view(request):
+def update_profile_view(request):
     serializer = UserUpdateInfoSerializer(request.user, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    methods=["put"],
+    request_body=UserPasswordUpdateSerializer,
+)
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_password_view(request):
+    user = request.user
+    serializer = UserPasswordUpdateSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if user.check_password(serializer.validated_data.get('current_password')):
+        new_password = serializer.validated_data.get('new_password')
+        user.set_password(new_password)
+        user.save()
+        return Response({'detail': 'Password updated successfully.'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'detail': 'Invalid current password.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

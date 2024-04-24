@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from cottages.models import Cottage
 from cottages.permissions import IsAuthorOrReadOnly
-from cottages.serializers import CottageCreateSerializer, CottageListSerializer
+from cottages.serializers import CottageCreateSerializer, CottageInfoWithRatingSerializer
 from cottages.services import get_cottages_list
 from relations.models import UserCottageLike, UserCottageRent, UserCottageReview
 from relations.serializers import UserCottageRentSerializer, UserCottageReviewSerializer
@@ -83,7 +83,7 @@ def get_current_user_favorites(request):
     user = request.user
     liked_cottages_list_id = get_liked_cottages_ids(user)
     liked_cottages = get_cottages_list(pk__in=liked_cottages_list_id)
-    serializer = CottageListSerializer(liked_cottages, many=True)
+    serializer = CottageInfoWithRatingSerializer(liked_cottages, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 

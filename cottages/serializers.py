@@ -18,7 +18,7 @@ class CottageCategorySerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class CottageListSerializer(serializers.ModelSerializer):
+class CottageInfoWithRatingSerializer(serializers.ModelSerializer):
     images = CottageImageSerializer(many=True, read_only=True)
     average_rating = serializers.FloatField(read_only=True)
     town = TownNameSerializer(read_only=True)
@@ -96,7 +96,8 @@ class ImageUpdateSerializer(serializers.ModelSerializer):
         model = CottageImage
         fields = ['id', 'image', 'order']
 
-    def validate_order(self, value):
+    @staticmethod
+    def validate_order(value):
         if not isinstance(value, int):
             raise serializers.ValidationError("Order должен быть целым числом.")
         return value
