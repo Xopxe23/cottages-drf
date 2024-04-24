@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from users.models import EmailVerification
-from users.serializers import UserFullNameSerializer, UserSerializer
+from users.serializers import UserFullNameSerializer, UserSerializer, UserUpdateInfoSerializer
 from users.services import create_email_verification
 from users.tasks import send_email_verification
 
@@ -66,12 +66,12 @@ def user_profile_view(request):
 
 @swagger_auto_schema(
     methods=["put", "patch"],
-    request_body=UserFullNameSerializer,
+    request_body=UserUpdateInfoSerializer,
 )
 @api_view(['PUT', "PATCH"])
 @permission_classes([IsAuthenticated])
 def user_update_profile_view(request):
-    serializer = UserFullNameSerializer(request.user, data=request.data)
+    serializer = UserUpdateInfoSerializer(request.user, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
