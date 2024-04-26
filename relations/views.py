@@ -1,6 +1,10 @@
+from uuid import UUID
+
+from django.db.models import QuerySet
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from cottages.models import Cottage
@@ -16,12 +20,12 @@ class ListUserCottageReviewView(generics.ListCreateAPIView):
     serializer_class = UserCottageReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[UserCottageReview]:
         cottage_id = self.kwargs['cottage_id']
         queryset = UserCottageReview.objects.filter(cottage_id=cottage_id).select_related("user")
         return queryset
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user, cottage_id=self.kwargs['cottage_id'])
 
 
@@ -33,7 +37,7 @@ class UpdateDestroyReviewView(generics.UpdateAPIView, generics.DestroyAPIView):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def create_cottage_rent_view(request, cottage_id):
+def create_cottage_rent_view(request: Request, cottage_id: UUID) -> Response:
     serializer = UserCottageRentSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
@@ -49,7 +53,7 @@ def create_cottage_rent_view(request, cottage_id):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_current_user_rents_view(request):
+def get_current_user_rents_view(request: Request) -> Response:
     user = request.user
     rents = UserCottageRent.objects.select_related("cottage").filter(user=user)
     serializer = UserCottageRentSerializer(rents, many=True)
@@ -58,7 +62,7 @@ def get_current_user_rents_view(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_current_user_cottages_view(request):
+def get_current_user_cottages_view(request: Request) -> Response:
     user = request.user
     cottages = Cottage.objects.filter(owner=user)
     serializer = CottageCreateSerializer(cottages, many=True)
@@ -67,7 +71,7 @@ def get_current_user_cottages_view(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def add_or_remove_favorites(request, cottage_id):
+def add_or_remove_favorites(request: Request, cottage_id: UUID) -> Response:
     user = request.user
     exists = UserCottageLike.objects.filter(user=user, cottage_id=cottage_id).first()
     if exists:
@@ -79,7 +83,7 @@ def add_or_remove_favorites(request, cottage_id):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_current_user_favorites(request):
+def get_current_user_favorites(request: Request) -> Response:
     user = request.user
     liked_cottages_list_id = get_liked_cottages_ids(user)
     liked_cottages = get_cottages_list(pk__in=liked_cottages_list_id)
@@ -89,7 +93,7 @@ def get_current_user_favorites(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def add_cottage_to_favorites(request, cottage_id):
+def add_cottage_to_favorites(request: Request, cottage_id: UUID) -> Response:
     user = request.user
     UserCottageLike.objects.create(user=user, cottage_id=cottage_id)
     return Response({"status": "cottage added to favorites"}, status=status.HTTP_200_OK)
@@ -97,7 +101,7 @@ def add_cottage_to_favorites(request, cottage_id):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def remove_cottage_from_favorites(request, cottage_id):
+def remove_cottage_from_favorites(request: Request, cottage_id: UUID) -> Response:
     user = request.user
     UserCottageLike.objects.filter(user=user, cottage_id=cottage_id).delete()
     return Response({"status": "removed from favorites"}, status=status.HTTP_204_NO_CONTENT)

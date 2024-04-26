@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from users.models import EmailVerification
@@ -59,7 +60,7 @@ def logout_view(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def user_profile_view(request):
+def user_profile_view(request: Request) -> Response:
     user = request.user
     serializer = UserSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -71,7 +72,7 @@ def user_profile_view(request):
 )
 @api_view(['PUT', "PATCH"])
 @permission_classes([IsAuthenticated])
-def update_profile_view(request):
+def update_profile_view(request: Request) -> Response:
     serializer = UserUpdateInfoSerializer(request.user, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -85,7 +86,7 @@ def update_profile_view(request):
 )
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def update_password_view(request):
+def update_password_view(request: Request) -> Response:
     user = request.user
     serializer = UserPasswordUpdateSerializer(data=request.data)
     if not serializer.is_valid():
@@ -101,7 +102,7 @@ def update_password_view(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def email_verification_request_view(request):
+def email_verification_request_view(request: Request) -> Response:
     user = request.user
     EmailVerification.objects.filter(user=user).delete()
     if request.user.is_verified:
@@ -123,7 +124,7 @@ def email_verification_request_view(request):
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def email_verification_view(request):
+def email_verification_view(request: Request) -> Response:
     user = request.user
     code = request.data.get("code")
     if not code:

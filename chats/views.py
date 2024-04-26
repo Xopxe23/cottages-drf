@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
@@ -23,7 +24,7 @@ class ChatMessageListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Message]:
         chat_id = self.kwargs.get('chat_id')
         get_object_or_404(Chat, pk=chat_id)
         queryset = Message.objects.filter(chat_id=chat_id).select_related('user').order_by('-timestamp')

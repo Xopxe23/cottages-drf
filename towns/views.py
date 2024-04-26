@@ -1,9 +1,11 @@
-from django.db.models import Max
+from django.db.models import Max, QuerySet
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 
 from cottages.serializers import ImageUpdateSerializer
 from cottages.services import update_image_order
@@ -24,11 +26,11 @@ class TownAttractionViewSet(viewsets.ModelViewSet):
     serializer_class = TownAttractionSerializer
     permission_classes = [IsAdminOrReadOnly, ]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Town]:
         town_id = self.kwargs.get('town_pk')
         return TownAttraction.objects.filter(town=town_id)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: Serializer) -> None:
         town_id = self.kwargs.get('town_pk')
         serializer.save(town_id=town_id)
 
@@ -45,7 +47,7 @@ class TownAttractionViewSet(viewsets.ModelViewSet):
         required=['id', 'order'],
     ),
 )
-def update_town_image_order(request):
+def update_town_image_order(request: Request) -> Response:
     serializer = ImageUpdateSerializer(data=request.data)
     if serializer.is_valid():
         image_id = serializer.validated_data.get("id")
@@ -73,7 +75,7 @@ def update_town_image_order(request):
         required=['id', 'order'],
     ),
 )
-def update_attraction_image_order(request):
+def update_attraction_image_order(request: Request) -> Response:
     serializer = ImageUpdateSerializer(data=request.data)
     if serializer.is_valid():
         image_id = serializer.validated_data.get("id")
