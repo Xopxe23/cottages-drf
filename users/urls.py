@@ -1,24 +1,12 @@
 from django.urls import include, path
 
-from users.views import (
-    email_verification_request_view,
-    email_verification_view,
-    login_view,
-    logout_view,
-    register_user_view,
-    update_password_view,
-    update_profile_view,
-    user_profile_view,
-)
+from users.views import login_view, register_view, user_profile_view, verify_login_view, verify_register_view
 
 urlpatterns = [
-    path("register/", register_user_view, name="register"),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('me/', user_profile_view, name='profile'),
-    path('update-info/', update_profile_view, name='profile-update'),
-    path('update-password/', update_password_view, name='password-update'),
     path('', include('social_django.urls')),
-    path('request-verify/', email_verification_request_view, name="request-verify"),
-    path('verify/', email_verification_view, name="verify")
+    path("register/", register_view, name="register"),
+    path("verify-register/", verify_register_view, name="verify-register"),
+    path("login/", login_view, name="login"),
+    path("verify-login/", verify_login_view, name="verify-login"),
+    path("me/", user_profile_view, name="me"),
 ]

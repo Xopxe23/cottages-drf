@@ -166,7 +166,7 @@ TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -185,10 +185,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
-    # 'users.services.CustomVKOAuth2Backend',
-    'social_core.backends.yandex.YandexOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
 )
 
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
@@ -198,7 +197,7 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 # EMAIL_HOST = 'sm12.hosting.reg.ru'
 # SMTP_PORT = 587
 # EMAIL_HOST_USER = 'admin@beiron.org'
-# EMAIL_HOST_PASSWORD = '1Beiron@beiron.co'
+# EMAIL_HOST_PASSWORD = ///
 # EMAIL_USE_TLS = True
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

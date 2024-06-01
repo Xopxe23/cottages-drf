@@ -1,7 +1,9 @@
+import re
+
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from users.models import User
+from users.models import User, VerifyCode
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -39,3 +41,17 @@ class UserUpdateInfoSerializer(serializers.ModelSerializer):
 class UserPasswordUpdateSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+
+class VerifyCodeSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(write_only=True, required=True)
+
+    class Meta:
+        model = VerifyCode
+        fields = ["email", "code"]
+
+    @staticmethod
+    def validate_code(value):
+        if not re.match(r'^[A-Z]{6}$', value):
+            raise serializers.ValidationError("Code must be 6 uppercase letters")
+        return value
