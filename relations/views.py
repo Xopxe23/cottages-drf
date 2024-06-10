@@ -11,6 +11,9 @@ from cottages.models import Cottage
 from cottages.permissions import IsAuthorOrReadOnly
 from cottages.serializers import CottageCreateSerializer, CottageInfoWithRatingSerializer
 from cottages.services import get_cottages_list
+from payments.serializers import PaymentSerializer
+from payments.services import create_payment
+from payments.tasks import schedule_check_and_update_payment_status
 from relations.models import UserCottageLike, UserCottageRent, UserCottageReview
 from relations.serializers import UserCottageRentSerializer, UserCottageReviewSerializer
 from relations.services import get_liked_cottages_ids, is_cottage_available
@@ -45,8 +48,14 @@ def create_cottage_rent_view(request: Request, cottage_id: UUID) -> Response:
     end_date = serializer.validated_data['end_date']
 
     if is_cottage_available(cottage_id, start_date, end_date):
-        serializer.save(user=request.user, cottage_id=cottage_id, status=1)
-        return Response({"status": "success"}, status=status.HTTP_201_CREATED)
+        rent = serializer.save(user=request.user, cottage_id=cottage_id, status=1)
+        payment = create_payment(rent, "localhost:8000/cottages")
+        schedule_check_and_update_payment_status.delay(payment.id)
+        payment_serializer = PaymentSerializer(payment)
+        return Response({
+            "status": "success",
+            "data": payment_serializer.data
+        }, status=status.HTTP_201_CREATED)
     else:
         return Response({"error": "Коттедж занят в указанные даты"}, status=status.HTTP_400_BAD_REQUEST)
 

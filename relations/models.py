@@ -56,7 +56,7 @@ class UserCottageRent(models.Model):
         (1, 'Забронирован'),
         (2, 'Оплачен'),
         (3, 'Отказ'),
-        (3, 'Подтвержден'),
+        (4, 'Подтвержден'),
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="rents", verbose_name="Коттедж")

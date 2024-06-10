@@ -21,7 +21,7 @@ def get_booked_cottages_ids(start_date, end_date: str) -> QuerySet[Cottage]:
     booked_cottages = UserCottageRent.objects.filter(
         Q(start_date__gte=start_date, start_date__lt=end_date) |
         Q(start_date__lte=start_date, end_date__gt=start_date)
-    ).values_list('cottage')
+    ).exclude(status=3).values_list('cottage')
     return booked_cottages
 
 

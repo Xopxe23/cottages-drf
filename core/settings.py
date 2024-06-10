@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'cottages',
     'relations',
     'towns',
-    'chats'
+    'chats',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -237,8 +238,18 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    'https://7e0f-95-214-8-242.ngrok-free.app',
+]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    '7e0f-95-214-8-242.ngrok-free.app',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+
+SHOP_ID = '400257'
+SHOP_SECRET = 'test_RVT2IR-ucVYoJbL72ppO4NAGFTyFfj68JtbGvrc6r9Q'
