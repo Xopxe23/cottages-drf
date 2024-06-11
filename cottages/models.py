@@ -27,22 +27,30 @@ class Cottage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(CottageCategory, on_delete=models.CASCADE, verbose_name="Категория")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
-    name = models.CharField(max_length=255, verbose_name="Название")
-    description = models.TextField(verbose_name="Описание")
-    town = models.ForeignKey(Town, on_delete=models.CASCADE, verbose_name="Населенный пункт")
+    name = models.CharField(max_length=255, verbose_name="Название", blank=True, null=True)
+    description = models.TextField(verbose_name="Описание", blank=True, null=True)
+    town = models.ForeignKey(Town, on_delete=models.CASCADE, verbose_name="Населенный пункт", blank=True, null=True)
     address = models.CharField(max_length=255, null=True, blank=True, verbose_name="Адрес")
-    latitude = models.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)], verbose_name="Широта")
-    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)], verbose_name="Долгота")
-    price = models.PositiveIntegerField(validators=[MaxValueValidator(99999)], verbose_name="Цена")
-    guests = models.PositiveIntegerField(validators=[MaxValueValidator(50)], verbose_name="Кол-во гостей")
-    beds = models.PositiveIntegerField(validators=[MaxValueValidator(30)], verbose_name="Кол-во кроватей")
-    rooms = models.PositiveIntegerField(validators=[MaxValueValidator(15)], verbose_name="Кол-во комнат")
-    total_area = models.PositiveIntegerField(validators=[MaxValueValidator(500)], verbose_name="Общая площадь")
-    parking_places = models.PositiveIntegerField(default=0, verbose_name="Кол-во парковочных мест")
-    check_in_time = models.TimeField(verbose_name="Время заезда")
-    check_out_time = models.TimeField(verbose_name="Время выезда")
-    rules = models.JSONField(verbose_name="Правила")
-    amenities = models.JSONField(verbose_name="Условия")
+    latitude = models.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)], verbose_name="Широта",
+                                 blank=True, null=True)
+    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)], verbose_name="Долгота",
+                                  blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена", blank=True, null=True)
+    guests = models.PositiveIntegerField(validators=[MaxValueValidator(50)], verbose_name="Кол-во гостей",
+                                         blank=True, null=True)
+    beds = models.PositiveIntegerField(validators=[MaxValueValidator(30)], verbose_name="Кол-во кроватей",
+                                       blank=True, null=True)
+    rooms = models.PositiveIntegerField(validators=[MaxValueValidator(15)], verbose_name="Кол-во комнат",
+                                        blank=True, null=True)
+    total_area = models.PositiveIntegerField(validators=[MaxValueValidator(500)], verbose_name="Общая площадь",
+                                             blank=True, null=True)
+    parking_places = models.PositiveIntegerField(default=0, verbose_name="Кол-во парковочных мест",
+                                                 blank=True, null=True)
+    check_in_time = models.TimeField(verbose_name="Время заезда", blank=True, null=True)
+    check_out_time = models.TimeField(verbose_name="Время выезда", blank=True, null=True)
+    rules = models.JSONField(verbose_name="Правила", blank=True, null=True)
+    amenities = models.JSONField(verbose_name="Условия", blank=True, null=True)
+    is_ready = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Коттедж'

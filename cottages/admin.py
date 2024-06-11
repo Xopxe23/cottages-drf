@@ -6,7 +6,7 @@ from cottages.models import Cottage, CottageCategory, CottageImage
 
 @admin.register(Cottage)
 class CottageAdmin(admin.ModelAdmin):
-    list_display = ("town", "name", "price", "guests")
+    list_display = ("id", "town", "name", "price", "guests")
     list_display_links = ("town", "name")
 
 

@@ -60,7 +60,7 @@
     "pk": "3cbf2cef-4015-4df9-af1d-df664ae1dad1",
     "fields": {
       "cottage": "ed3db795-913e-4e51-80b5-3949f0172caf",
-      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "location_rating": 5,
       "cleanliness_rating": 3,
       "communication_rating": 5,
@@ -88,7 +88,7 @@
     "pk": "5b928098-6c04-4f51-8622-7f7f9bf3e9a0",
     "fields": {
       "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
-      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "location_rating": 5,
       "cleanliness_rating": 5,
       "communication_rating": 4,
@@ -144,7 +144,7 @@
     "pk": "85624e7f-aa2d-40d7-b6e7-7e9a75abb85f",
     "fields": {
       "cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01",
-      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "location_rating": 5,
       "cleanliness_rating": 5,
       "communication_rating": 5,
@@ -172,7 +172,7 @@
     "pk": "9ab1b65e-80c6-449f-82fe-e47932c6a7c0",
     "fields": {
       "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
-      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "location_rating": 3,
       "cleanliness_rating": 3,
       "communication_rating": 4,
@@ -200,7 +200,7 @@
     "pk": "c1e2f418-4e7c-4e8e-adc9-0903a9a5b948",
     "fields": {
       "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
-      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "location_rating": 5,
       "cleanliness_rating": 5,
       "communication_rating": 4,
@@ -214,26 +214,12 @@
     "pk": "c97f3caa-038b-425d-8dcc-fd7ef572fc73",
     "fields": {
       "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
-      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "location_rating": 4,
       "cleanliness_rating": 5,
       "communication_rating": 3,
       "value_rating": 5,
       "comment": "Все хорошо. Скромные номера, соответствуют стоимости. Видно что номера уже не новые, но все чисто и уютно. В номере тепло. Обслуживание хорошее. Погладили рубашку за 120 руб, как никто ее раньше не гладил))))",
-      "rating": "4.2"
-    }
-  },
-  {
-    "model": "relations.usercottagereview",
-    "pk": "cc778f6e-13f2-4c14-b6f8-8a2aff2babf5",
-    "fields": {
-      "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
-      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
-      "location_rating": 4,
-      "cleanliness_rating": 5,
-      "communication_rating": 4,
-      "value_rating": 4,
-      "comment": "Было достаточно неплохо, все понравилось, но бывало и лучше)",
       "rating": "4.2"
     }
   },

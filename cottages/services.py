@@ -1,8 +1,8 @@
 from uuid import UUID
 
 from dateutil.relativedelta import relativedelta
-from django.db.models import Avg, Prefetch, Q, QuerySet
-from django.db.models.functions import Round
+from django.db.models import Avg, Prefetch, Q, QuerySet, ExpressionWrapper, FloatField
+from django.db.models.functions import Round, Coalesce
 
 from cottages.models import Cottage
 from relations.models import UserCottageRent, UserCottageReview
@@ -10,9 +10,10 @@ from relations.models import UserCottageRent, UserCottageReview
 
 def get_cottages_list(**filter_by) -> QuerySet[Cottage]:
     """Return cottages with annotated rating"""
-    cottages = Cottage.objects.filter(**filter_by).select_related("category", "town").prefetch_related(
+    cottages = Cottage.objects.filter(is_ready=True, **filter_by).select_related("category", "town").prefetch_related(
         "images", Prefetch("reviews", queryset=UserCottageReview.objects.only("cottage", "rating"))
-    ).annotate(average_rating=Round(Avg("reviews__rating"), 1))
+    ).annotate(average_rating=Coalesce(ExpressionWrapper(Round(Avg("reviews__rating"), 1),
+                                                         output_field=FloatField()), 0.0))
     return cottages
 
 
