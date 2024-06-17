@@ -1,37 +1,34 @@
 from uuid import UUID
 
-from django.db.models import QuerySet
-from django.shortcuts import get_object_or_404
-from rest_framework import generics, status
+from django.http import Http404
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 
 from cottages.models import Cottage
 from cottages.permissions import IsAuthorOrReadOnly
 from cottages.serializers import CottageCreateUpdateSerializer, CottageInfoWithRatingSerializer
-from cottages.services import get_cottages_list
 from payments.serializers import PaymentSerializer
 from payments.services import create_payment
 from payments.tasks import schedule_check_and_update_payment_status
 from relations.models import UserCottageLike, UserCottageRent, UserCottageReview
 from relations.serializers import UserCottageRentSerializer, UserCottageReviewSerializer
-from relations.services import get_liked_cottages_ids, is_cottage_available
 
 
-class UserCottageReviewViewSet(ViewSet):
+class UserCottageReviewList(APIView):
     permission_classes = [IsAuthorOrReadOnly]
 
     # noinspection PyMethodMayBeStatic
-    def list(self, request: Request, cottage_id: UUID) -> Response:
+    def get(self, request: Request, cottage_id: UUID) -> Response:
         queryset = UserCottageReview.objects.filter(cottage_id=cottage_id).select_related("user")
         serializer = UserCottageReviewSerializer(queryset, many=True)
         return Response(serializer.data)
 
     # noinspection PyMethodMayBeStatic
-    def create(self, request, cottage_id: UUID) -> Response:
+    def post(self, request: Request, cottage_id: UUID) -> Response:
         serializer = UserCottageReviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user, cottage_id=cottage_id)
@@ -39,17 +36,26 @@ class UserCottageReviewViewSet(ViewSet):
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    create.authentication_classes = [IsAuthenticatedOrReadOnly]
+
+class UserCottageReviewDetail(APIView):
+    permission_classes = [IsAuthorOrReadOnly]
 
     # noinspection PyMethodMayBeStatic
-    def retrieve(self, request: Request, cottage_id: UUID, pk: UUID) -> Response:
-        review = get_object_or_404(UserCottageReview.objects.filter(id=pk).select_related("user"))
+    def get_object(self, review_id: UUID):
+        try:
+            return UserCottageReview.objects.select_related("user").get(pk=review_id)
+        except UserCottageReview.DoesNotExist:
+            raise Http404
+
+    # noinspection PyMethodMayBeStatic
+    def get(self, request: Request, cottage_id: UUID, review_id: UUID) -> Response:
+        review = self.get_object(review_id)
         serializer = UserCottageReviewSerializer(review)
         return Response(serializer.data)
 
     # noinspection PyMethodMayBeStatic
-    def update(self, request: Request, cottage_id: UUID, pk: UUID) -> Response:
-        review = get_object_or_404(UserCottageReview.objects.filter(id=pk))
+    def put(self, request: Request, cottage_id: UUID, review_id: UUID) -> Response:
+        review = self.get_object(review_id)
         serializer = UserCottageReviewSerializer(review, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -58,29 +64,10 @@ class UserCottageReviewViewSet(ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # noinspection PyMethodMayBeStatic
-    def destroy(self, request: Request, pk=None, cottage_id=None) -> Response:
-        cottage = get_object_or_404(UserCottageReview, pk=pk)
-        cottage.delete()
+    def delete(self, request: Request, cottage_id: UUID, review_id: UUID) -> Response:
+        review = self.get_object(review_id)
+        review.delete()
         return Response({'status': 'Cottage review deleted successfully'}, status=status.HTTP_200_OK)
-
-
-# class ListUserCottageReviewView(generics.ListCreateAPIView):
-#     serializer_class = UserCottageReviewSerializer
-#     permission_classes = [IsAuthenticatedOrReadOnly]
-#
-#     def get_queryset(self) -> QuerySet[UserCottageReview]:
-#         cottage_id = self.kwargs['cottage_id']
-#         queryset = UserCottageReview.objects.filter(cottage_id=cottage_id).select_related("user")
-#         return queryset
-#
-#     def perform_create(self, serializer) -> None:
-#         serializer.save(user=self.request.user, cottage_id=self.kwargs['cottage_id'])
-#
-#
-# class UpdateDestroyReviewView(generics.UpdateAPIView, generics.DestroyAPIView):
-#     serializer_class = UserCottageReviewSerializer
-#     queryset = UserCottageReview.objects.select_related("user")
-#     permission_classes = [IsAuthorOrReadOnly]
 
 
 @api_view(["POST"])
@@ -91,8 +78,10 @@ def create_cottage_rent_view(request: Request, cottage_id: UUID) -> Response:
 
     start_date = serializer.validated_data['start_date']
     end_date = serializer.validated_data['end_date']
-
-    if is_cottage_available(cottage_id, start_date, end_date):
+    cottage = Cottage.objects.filter(pk=cottage_id).prefetch_related('rents').first()
+    if not cottage:
+        raise Http404("Cottage does not exist")
+    if cottage.is_available(start_date, end_date):
         rent = serializer.save(user=request.user, cottage_id=cottage_id, status=1)
         payment = create_payment(rent, "localhost:8000/cottages")
         schedule_check_and_update_payment_status.delay(payment.id)
@@ -139,8 +128,8 @@ def add_or_remove_favorites(request: Request, cottage_id: UUID) -> Response:
 @permission_classes([IsAuthenticated])
 def get_current_user_favorites(request: Request) -> Response:
     user = request.user
-    liked_cottages_list_id = get_liked_cottages_ids(user)
-    liked_cottages = get_cottages_list(pk__in=liked_cottages_list_id)
+    liked_cottages_list_id = UserCottageLike.objects.filter(user=user).values_list('cottage_id', flat=True)
+    liked_cottages = Cottage.objects.get_cottages_list(id__in=liked_cottages_list_id)
     serializer = CottageInfoWithRatingSerializer(liked_cottages, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 

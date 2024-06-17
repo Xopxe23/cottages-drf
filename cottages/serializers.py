@@ -1,9 +1,10 @@
 from decimal import Decimal
 
+from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
 from cottages.models import Cottage, CottageCategory, CottageImage
-from cottages.services import get_occupied_dates, round_ratings
+from relations.models import UserCottageRent
 from towns.serializers import TownNameSerializer
 from users.serializers import UserFullNameSerializer
 
@@ -92,11 +93,31 @@ class CottageDetailSerializer(CottageCreateUpdateSerializer):
 
     def to_representation(self, instance) -> dict:
         data = super().to_representation(instance)
-        return round_ratings(data)
+        return self.round_ratings(data)
+
+    # noinspection PyMethodMayBeStatic
+    def round_ratings(self, data: dict) -> dict:
+        """Make decimal ratings to float"""
+        data['average_rating'] = round(float(data['average_rating']), 1)
+        data['average_location_rating'] = round(float(data['average_location_rating']), 1)
+        data['average_cleanliness_rating'] = round(float(data['average_cleanliness_rating']), 1)
+        data['average_communication_rating'] = round(float(data['average_communication_rating']), 1)
+        data['average_value_rating'] = round(float(data['average_value_rating']), 1)
+        return data
 
     @staticmethod
     def get_occupied_dates(obj: Cottage) -> dict:
-        return get_occupied_dates(obj.pk)
+        """Return occupied days of cottage"""
+        all_dates = UserCottageRent.objects.filter(cottage=obj.pk).values_list('start_date', 'end_date')
+        closed_days = []
+        start_days = []
+        for start_date, end_date in all_dates:
+            start_days.append(start_date)
+            current_date = start_date + relativedelta(days=1)
+            while current_date < end_date:
+                closed_days.append(current_date)
+                current_date += relativedelta(days=1)
+        return {"closed_days": closed_days, "start_days": start_days}
 
     @staticmethod
     def get_price(obj: Cottage):

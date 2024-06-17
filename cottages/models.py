@@ -1,12 +1,16 @@
 import os
 import uuid
+from typing import Union
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import Avg, ExpressionWrapper, FloatField, Q
+from django.db.models.functions import Coalesce, Round
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from ordered_model.models import OrderedModel
 
+from relations.models import UserCottageRent
 from towns.models import Town
 from users.models import User
 
@@ -21,6 +25,41 @@ class CottageCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CottageManager(models.Manager):
+
+    def get_cottages_list(self, start_date: str = None, end_date: str = None) -> models.QuerySet:
+        """Return cottages with annotated rating"""
+        cottages = self.filter(is_ready=True).select_related("category", "town").prefetch_related(
+            "images", "reviews").annotate(
+            average_rating=Coalesce(ExpressionWrapper(Round(Avg("reviews__rating"), 1),
+                                                      output_field=FloatField()), 0.0)
+        )
+        if start_date and end_date:
+            booked_cottages_ids = self._get_booked_cottages_ids(start_date, end_date)
+            cottages = cottages.exclude(id__in=booked_cottages_ids)
+        return cottages
+
+    def get_cottage_by_id(self, id: uuid.UUID) -> Union["Cottage", None]:
+        """Return cottage by ID"""
+        cottage = self.filter(id=id).select_related("town", "category", "owner").prefetch_related("images").annotate(
+            average_rating=Coalesce(Avg("reviews__rating"), 0.0),
+            average_location_rating=Coalesce(Avg("reviews__location_rating"), 0.0),
+            average_cleanliness_rating=Coalesce(Avg("reviews__cleanliness_rating"), 0.0),
+            average_communication_rating=Coalesce(Avg("reviews__communication_rating"), 0.0),
+            average_value_rating=Coalesce(Avg("reviews__value_rating"), 0.0)
+        ).first()
+        return cottage
+
+    # noinspection PyMethodMayBeStatic
+    def _get_booked_cottages_ids(self, start_date: str, end_date: str) -> list[uuid.UUID]:
+        """Return id's of booked cottages on current dates"""
+        booked_cottages_ids = UserCottageRent.objects.filter(
+            Q(start_date__gte=start_date, start_date__lt=end_date) |
+            Q(start_date__lte=start_date, end_date__gt=start_date)
+        ).exclude(status=3).values_list('cottage')
+        return booked_cottages_ids
 
 
 class Cottage(models.Model):
@@ -52,12 +91,24 @@ class Cottage(models.Model):
     amenities = models.JSONField(verbose_name="Условия", blank=True, null=True)
     is_ready = models.BooleanField(default=False)
 
+    objects = CottageManager()
+
     class Meta:
         verbose_name = 'Коттедж'
         verbose_name_plural = 'Коттеджи'
 
     def __str__(self):
         return f'{self.name} in {self.town.name}'
+
+    def is_available(self, start_date: str, end_date: str):
+        """Return True if cottage is available else False"""
+        existing_rents = self.rents.exclude(status=3)
+        is_available = not existing_rents.filter(
+            Q(start_date__gte=start_date, start_date__lt=end_date) |
+            Q(start_date__lte=start_date, end_date__gt=start_date)
+        ).exists()
+
+        return is_available
 
 
 def cottage_image_path(instance, filename):
