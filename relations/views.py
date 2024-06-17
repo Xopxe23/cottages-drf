@@ -11,8 +11,8 @@ from rest_framework.views import APIView
 from cottages.models import Cottage
 from cottages.permissions import IsAuthorOrReadOnly
 from cottages.serializers import CottageCreateUpdateSerializer, CottageInfoWithRatingSerializer
+from payments.models import Payment
 from payments.serializers import PaymentSerializer
-from payments.services import create_payment
 from payments.tasks import schedule_check_and_update_payment_status
 from relations.models import UserCottageLike, UserCottageRent, UserCottageReview
 from relations.serializers import UserCottageRentSerializer, UserCottageReviewSerializer
@@ -83,7 +83,7 @@ def create_cottage_rent_view(request: Request, cottage_id: UUID) -> Response:
         raise Http404("Cottage does not exist")
     if cottage.is_available(start_date, end_date):
         rent = serializer.save(user=request.user, cottage_id=cottage_id, status=1)
-        payment = create_payment(rent, "localhost:8000/cottages")
+        payment = Payment.objects.create_payment(rent)
         schedule_check_and_update_payment_status.delay(payment.id)
         payment_serializer = PaymentSerializer(payment)
         return Response({

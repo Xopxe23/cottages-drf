@@ -87,7 +87,10 @@ def update_attraction_image_order(request: Request) -> Response:
         except AttractionImage.DoesNotExist:
             return Response({"error": "Image not found"}, status=status.HTTP_404_NOT_FOUND)
         max_order = image.attraction.images.aggregate(Max('order'))['order__max']
-        update_image_order(image, new_order, max_order)
+        if new_order > max_order:
+            image.bottom()
+        else:
+            image.to(new_order)
         return Response({"success": "Order updated successfully"}, status=status.HTTP_200_OK)
     else:
         return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

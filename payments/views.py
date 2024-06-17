@@ -8,7 +8,6 @@ from yookassa.domain.notification import WebhookNotification
 
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
-from payments.services import change_payment_status
 
 
 @api_view(["GET"])
@@ -31,5 +30,5 @@ def change_payment_status_view(request: Request) -> Response:
     ukassa_id = ukassa_info.id
     ukassa_status = ukassa_info.status
     payment = Payment.objects.select_related("rent").filter(ukassa_id=ukassa_id)
-    change_payment_status(payment, ukassa_status)
+    payment.change_payment_status(ukassa_status)
     return Response(status.HTTP_204_NO_CONTENT)
