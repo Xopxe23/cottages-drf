@@ -12,6 +12,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from cottages.documents import CottageDocument
 from cottages.models import Cottage, CottageImage
 from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import (
@@ -87,6 +88,34 @@ class CottageDetail(APIView):
         cottage = self.get_object(cottage_id)
         cottage.delete()
         return Response({'status': 'Cottage deleted successfully'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def cottage_search(request):
+    query = request.query_params.get('query', '')
+    search = CottageDocument.search().query("multi_match", query=query, fields=['name', 'town.name'])
+    response = search.execute()
+    cottage_ids = [hit.id for hit in response]
+    cottages = Cottage.objects.get_cottages_list().filter(id__in=cottage_ids)
+    serializer = CottageInfoWithRatingSerializer(cottages, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def cottage_suggest(request):
+    query = request.query_params.get('query', '')
+
+    search = CottageDocument.search()
+    suggest = search.suggest('name_suggestions', query, completion={'field': 'name.suggest'})
+    suggest = suggest.suggest('town_suggestions', query, completion={'field': 'town.name.suggest'})
+    response = suggest.execute()
+
+    suggestions = {
+        "names": [option._source.name for option in response.suggest.name_suggestions[0].options],
+        "towns": [option._source.town.name for option in response.suggest.town_suggestions[0].options],
+    }
+
+    return Response(suggestions)
 
 
 @swagger_auto_schema(

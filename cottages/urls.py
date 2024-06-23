@@ -1,6 +1,6 @@
 from django.urls import path
 
-from cottages.views import CottageDetail, CottageList, update_cottage_image_order
+from cottages.views import CottageDetail, CottageList, cottage_search, cottage_suggest, update_cottage_image_order
 from relations.views import (
     UserCottageReviewDetail,
     UserCottageReviewList,
@@ -13,6 +13,8 @@ from relations.views import (
 
 urlpatterns = [
     path('', CottageList.as_view(), name='cottage-list'),
+    path('search/', cottage_search, name='cottage-search'),
+    path('suggest/', cottage_suggest, name='cottage-suggest'),
     path('<uuid:cottage_id>/', CottageDetail.as_view(), name='cottage-detail'),
     path('<uuid:cottage_id>/reviews/', UserCottageReviewList.as_view(), name='review-list'),
     path('<uuid:cottage_id>/reviews/<uuid:review_id>/', UserCottageReviewDetail.as_view(), name='review-detail'),

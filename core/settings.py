@@ -28,7 +28,7 @@ DEBUG = True
 INTERNAL_IPS = [
     "127.0.0.1",
     "0.0.0.0",
-    "localhost"
+    "localhost",
 ]
 
 # Application definition
@@ -51,8 +51,10 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'ordered_model',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
 
-    'users',
+    'users.apps.UsersConfig',
     'cottages',
     'relations',
     'towns',
@@ -115,6 +117,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200',
+        'http_auth': ('elastic', 'Geo95RGe'),
+        'verify_certs': False,
+    },
 }
 
 
