@@ -4,4 +4,4 @@ __pycache__/
 .env
 .coverage
 db.sqlite3
-media
+./media
