@@ -2,7 +2,6 @@ import uuid
 
 from django.db import models
 
-from cottages.models import Cottage
 from users.models import User
 
 
@@ -15,7 +14,8 @@ class UserCottageReview(models.Model):
         (5, 'Отлично'),
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="reviews", verbose_name="Коттедж")
+    cottage = models.ForeignKey("cottages.Cottage", on_delete=models.CASCADE, related_name="reviews",
+                                verbose_name="Коттедж")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews", verbose_name="Пользователь")
     location_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг местоположения")
     cleanliness_rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="Рейтинг чистоты")
@@ -40,7 +40,8 @@ class UserCottageReview(models.Model):
 
 class UserCottageLike(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="likes", verbose_name="Коттедж")
+    cottage = models.ForeignKey("cottages.Cottage", on_delete=models.CASCADE, related_name="likes",
+                                verbose_name="Коттедж")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="likes", verbose_name="Пользователь")
 
     class Meta:
@@ -56,10 +57,11 @@ class UserCottageRent(models.Model):
         (1, 'Забронирован'),
         (2, 'Оплачен'),
         (3, 'Отказ'),
-        (3, 'Подтвержден'),
+        (4, 'Подтвержден'),
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE, related_name="rents", verbose_name="Коттедж")
+    cottage = models.ForeignKey("cottages.Cottage", on_delete=models.CASCADE, related_name="rents",
+                                verbose_name="Коттедж")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rents", verbose_name="Пользователь")
     status = models.IntegerField(choices=STATUS_CHOICES, verbose_name="Статус")
     start_date = models.DateField(verbose_name="Дата заезда")

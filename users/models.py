@@ -51,16 +51,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f'{self.first_name} {self.last_name}'
 
 
+class VerifyCodeManager(models.Manager):
+
+    def create_verify_code(self, user: User) -> "VerifyCode":
+        code = self.model(user=user)
+        code.save()
+        return code
+
+    def delete_verification_codes_for_user(self, user: User) -> None:
+        self.filter(user=user).delete()
+
+
 class VerifyCode(models.Model):
-    ACTION_CHOICES = (
-        ('R', 'Register'),
-        ('L', 'Login'),
-    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     code = models.CharField(max_length=6)
-    action = models.CharField(max_length=1, choices=ACTION_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     expires_at = models.DateTimeField()
+
+    objects = VerifyCodeManager()
 
     def save(self, *args, **kwargs) -> None:
         self.code = self.generate_verify_code()

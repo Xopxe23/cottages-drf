@@ -17,5 +17,5 @@ class UserCottageLikeAdmin(admin.ModelAdmin):
 
 @admin.register(UserCottageRent)
 class UserCottageRentAdmin(admin.ModelAdmin):
-    list_display = ("id", "cottage", "user", "start_date", "end_date")
+    list_display = ("id", "cottage", "status", "user", "start_date", "end_date")
     list_display_links = ("id", "cottage", "user")

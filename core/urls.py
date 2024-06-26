@@ -24,6 +24,7 @@ urlpatterns = [
     path('cottages/', include("cottages.urls")),
     path('towns/', include("towns.urls")),
     path('chats/', include('chats.urls')),
+    path('payments/', include('payments.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
@@ -32,3 +33,4 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
+    urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]

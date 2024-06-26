@@ -1,10 +1,19 @@
 services:
 
   redis:
-    image: "redis:latest"
+    image: redis:latest
     ports:
       - "6379:6379"
     container_name: redis
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
 
   web-app:
     build:
@@ -15,9 +24,10 @@ services:
       - .:/cottages-app
 
     command: >
-      sh -c  "./manage.py runserver 0.0.0.0:8000"
+      sh -c "./manage.py migrate && ./manage.py loaddata fixtures/users.json fixtures/categories.json fixtures/towns.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json &&./manage.py runserver 0.0.0.0:8000"
     depends_on:
       - redis
+      - db
 
   celery:
     build:
@@ -27,3 +37,19 @@ services:
       sh -c "celery -A core worker -l INFO"
     depends_on:
       - redis
+
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+#    environment:
+#      - discovery.type=single-node
+#    ports:
+#      - "9200:9200"
+#    container_name: elasticsearch
+#
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:7.17.0
+#    ports:
+#      - "5601:5601"
+#    environment:
+#      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+#    container_name: kibana

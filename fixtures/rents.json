@@ -4,7 +4,7 @@
     "pk": "083905ea-27b0-4e6b-90dc-edf7bc917d86",
     "fields": {
       "cottage": "b7a13f1d-618f-4ce1-82a2-4e8f482bc902",
-      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "status": 1,
       "start_date": "2024-01-16",
       "end_date": "2024-01-18"
@@ -15,7 +15,7 @@
     "pk": "1d0f6024-6c14-4f31-adf7-1782a3c134f9",
     "fields": {
       "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
-      "user": "c4eb7f56-9557-47bb-b0e6-51f4f4f018d1",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "status": 1,
       "start_date": "2024-01-02",
       "end_date": "2024-01-04"
@@ -48,7 +48,7 @@
     "pk": "3aff803a-97bf-4a4e-baaf-17e093f22034",
     "fields": {
       "cottage": "da8a0c05-3be4-4a2f-9c8d-0935a73f7c53",
-      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "status": 1,
       "start_date": "2024-01-12",
       "end_date": "2024-01-16"
@@ -58,7 +58,7 @@
     "model": "relations.usercottagerent",
     "pk": "86f5ac74-154b-420a-9b90-5d0259089cff",
     "fields": {
-      "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
+      "cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "status": 1,
       "start_date": "2023-12-15",
@@ -114,7 +114,7 @@
     "pk": "dcd82cc2-f506-4c9c-88ee-ee4f3e9f9190",
     "fields": {
       "cottage": "86dc0bf8-4b21-458a-a89b-56ec2218830b",
-      "user": "e5880aea-2fcd-4880-9b76-f371dee1bffd",
+      "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "status": 2,
       "start_date": "2024-03-20",
       "end_date": "2024-03-21"
