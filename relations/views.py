@@ -129,7 +129,7 @@ def add_or_remove_favorites(request: Request, cottage_id: UUID) -> Response:
 def get_current_user_favorites(request: Request) -> Response:
     user = request.user
     liked_cottages_list_id = UserCottageLike.objects.filter(user=user).values_list('cottage_id', flat=True)
-    liked_cottages = Cottage.objects.get_cottages_list(id__in=liked_cottages_list_id)
+    liked_cottages = Cottage.objects.get_cottages_list().filter(id__in=liked_cottages_list_id)
     serializer = CottageInfoWithRatingSerializer(liked_cottages, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 

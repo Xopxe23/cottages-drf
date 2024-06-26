@@ -9,8 +9,8 @@ from yookassa import Payment as UkassaPayment
 
 from relations.models import UserCottageRent
 
-Configuration.account_id = settings.SHOP_ID
-Configuration.secret_key = settings.SHOP_SECRET
+Configuration.account_id = settings.YOOMONEY_SHOP_ID
+Configuration.secret_key = settings.YOOMONEY_SHOP_SECRET
 
 
 class PaymentManager(models.Manager):

@@ -50,6 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}({self.email}, {self.first_name} {self.last_name})'
+
 
 class VerifyCodeManager(models.Manager):
 

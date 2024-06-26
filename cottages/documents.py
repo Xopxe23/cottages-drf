@@ -4,7 +4,7 @@ from django_elasticsearch_dsl.registries import registry
 from cottages.models import Cottage
 
 
-@registry.register_document
+# @registry.register_document
 class CottageDocument(Document):
     name = fields.TextField(
         attr='name',
