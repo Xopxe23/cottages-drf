@@ -58,7 +58,7 @@
     "model": "relations.usercottagerent",
     "pk": "86f5ac74-154b-420a-9b90-5d0259089cff",
     "fields": {
-      "cottage": "6117a76e-ee26-4def-a408-52522c1cbd7a",
+      "cottage": "9bc44801-3745-4f93-b2f3-4954bae5bf01",
       "user": "345778b7-4d20-4f6d-b81d-69c6f2e670d0",
       "status": 1,
       "start_date": "2023-12-15",

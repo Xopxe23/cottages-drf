@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-from datetime import timedelta
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,11 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)&)2k)-@lm-20%wr+od87qa5e9)xi44i*$_=@zg3!w2q*g95-l'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+DOCKER = True
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -53,6 +57,7 @@ INSTALLED_APPS = [
     'ordered_model',
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
+    'silk',
 
     'users.apps.UsersConfig',
     'cottages',
@@ -75,6 +80,7 @@ MIDDLEWARE = [
     'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',
 
     "corsheaders.middleware.CorsMiddleware",
+    'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -104,7 +110,10 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(
+                str(os.getenv('REDIS_HOST_DOCKER')) if DOCKER else str(os.getenv('REDIS_HOST')),
+                str(os.getenv('REDIS_PORT'))
+            )],
         },
     },
 }
@@ -113,7 +122,14 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': str(os.getenv('DATABASE_NAME')),
+        'USER': str(os.getenv('DATABASE_USER')),
+        'PASSWORD': str(os.getenv('DATABASE_PASSWORD')),
+        'HOST': str(os.getenv('DATABASE_HOST_DOCKER')) if DOCKER else str(os.getenv('DATABASE_HOST')),
+        'PORT': int(os.getenv('DATABASE_PORT')),
+    } if DOCKER else {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
@@ -121,34 +137,26 @@ DATABASES = {
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'http://localhost:9200',
-        'http_auth': ('elastic', 'Geo95RGe'),
+        'hosts': f"{str(os.getenv('ELASTIC_HOST_DOCKER' if DOCKER else 'ELASTIC_HOST'))}:"
+                 f"{str(os.getenv('ELASTIC_PORT'))}",
+        'http_auth': (str(os.getenv('ELASTIC_USER')), str(os.getenv('ELASTIC_PASSWORD'))),
         'verify_certs': False,
     },
 }
 
-
 # For localhost
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = (f"{str(os.getenv('REDIS_HOST_DOCKER')) if DOCKER else str(os.getenv('REDIS_HOST'))}:"
+                     f"{str(os.getenv('REDIS_PORT'))}")
+CELERY_RESULT_BACKEND = (f"{str(os.getenv('REDIS_HOST_DOCKER')) if DOCKER else str(os.getenv('REDIS_HOST'))}:"
+                         f"{str(os.getenv('REDIS_PORT'))}")
 
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": f"{str(os.getenv('REDIS_HOST_DOCKER')) if DOCKER else str(os.getenv('REDIS_HOST'))}:"
+                    f"{str(os.getenv('REDIS_PORT'))}",
     }
 }
-
-# For docker
-# CELERY_BROKER_URL = 'redis://redis:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-#
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": "redis://redis:6379",
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -213,19 +221,18 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-
 # OAuth
 
 LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/auth/get_tokens/"
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = '51820666'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'joUYMS6LUfYLDzg5rsdW'
+SOCIAL_AUTH_VK_OAUTH2_KEY = str(os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY'))
+SOCIAL_AUTH_VK_OAUTH2_SECRET = str(os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET'))
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', "first_name", "last_name"]
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 
-SOCIAL_AUTH_YANDEX_OAUTH2_KEY = '8ebfcdec3d014c7fbf06c13ab44c184d'
-SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = 'bb36514a34b8403e84a14a28a1882177'
-SOCIAL_AUTH_YANDEX_OAUTH2_REDIRECT_URI = 'http://localhost:8000/auth/complete/yandex-oauth2/'
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = str(os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_KEY'))
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = str(os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_SECRET'))
+SOCIAL_AUTH_YANDEX_OAUTH2_REDIRECT_URI = str(os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_REDIRECT_URI'))
 
 SWAGGER_SETTINGS = {
     'DEFAULT_INFO': 'core.urls.api_info',
@@ -248,18 +255,16 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    'https://7e0f-95-214-8-242.ngrok-free.app',
 ]
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    '7e0f-95-214-8-242.ngrok-free.app',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
-
-SHOP_ID = '400257'
-SHOP_SECRET = 'test_RVT2IR-ucVYoJbL72ppO4NAGFTyFfj68JtbGvrc6r9Q'
+# YooMoney
+YOOMONEY_SHOP_ID = str(os.getenv('YOOMONEY_SHOP_ID'))
+YOOMONEY_SHOP_SECRET = str(os.getenv('YOOMONEY_SHOP_SECRET'))
