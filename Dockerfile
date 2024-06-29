@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.11.4
 
 COPY requirements.txt /temp/requirements.txt
 
@@ -8,6 +8,7 @@ WORKDIR /cottages-app
 
 EXPOSE 8000
 
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # RUN ./manage.py migrate

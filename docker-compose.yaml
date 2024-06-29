@@ -28,6 +28,9 @@ services:
     depends_on:
       - redis
       - db
+    networks:
+      - default
+      - backend
 
   celery:
     build:
@@ -37,6 +40,10 @@ services:
       sh -c "celery -A core worker -l INFO"
     depends_on:
       - redis
+networks:
+  backend:
+    external: true
+
 
 #  elasticsearch:
 #    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0

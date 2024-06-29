@@ -253,12 +253,12 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://web-app:8000"
 ]
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "web-app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True

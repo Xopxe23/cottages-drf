@@ -81,6 +81,7 @@ class CottageDetailSerializer(CottageCreateUpdateSerializer):
     average_value_rating = serializers.DecimalField(max_digits=2, decimal_places=1, read_only=True)
     occupied_dates = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField()
+    images = CottageImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Cottage
