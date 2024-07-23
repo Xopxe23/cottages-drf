@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'towns',
     'chats',
     'payments',
+    'search',
 ]
 
 MIDDLEWARE = [

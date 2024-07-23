@@ -25,6 +25,7 @@ urlpatterns = [
     path('towns/', include("towns.urls")),
     path('chats/', include('chats.urls')),
     path('payments/', include('payments.urls')),
+    path('search/', include('search.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
