@@ -139,7 +139,7 @@ ELASTICSEARCH_DSL = {
     'default': {
         'hosts': f"{str(os.getenv('ELASTIC_HOST_DOCKER' if DOCKER else 'ELASTIC_HOST'))}:"
                  f"{str(os.getenv('ELASTIC_PORT'))}",
-        'http_auth': (str(os.getenv('ELASTIC_USER')), str(os.getenv('ELASTIC_PASSWORD'))),
+        'http_auth': None,
         'verify_certs': False,
     },
 }

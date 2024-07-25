@@ -24,10 +24,12 @@ services:
       - .:/cottages-app
 
     command: >
-      sh -c "./manage.py migrate && ./manage.py loaddata fixtures/users.json fixtures/categories.json fixtures/towns.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json &&./manage.py runserver 0.0.0.0:8000"
+      sh -c "./manage.py migrate && ./manage.py loaddata fixtures/users.json fixtures/categories.json fixtures/towns.json fixtures/cottages.json fixtures/likes.json fixtures/rents.json fixtures/reviews.json && ./manage.py runserver 0.0.0.0:8000"
     depends_on:
       - redis
       - db
+#      - elasticsearch
+#      - kibana
 
   celery:
     build:
@@ -39,17 +41,20 @@ services:
       - redis
 
 #  elasticsearch:
-#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.22-arm64
 #    environment:
-#      - discovery.type=single-node
+#      ES_JAVA_OPTS: -Xms512m -Xmx512m
+#      discovery.type: single-node
+#      xpack.security.enabled: false
 #    ports:
 #      - "9200:9200"
-#    container_name: elasticsearch
+#
+#    container_name: elasticsearch1
 #
 #  kibana:
-#    image: docker.elastic.co/kibana/kibana:7.17.0
+#    image: docker.elastic.co/kibana/kibana:7.17.22-arm64
 #    ports:
 #      - "5601:5601"
 #    environment:
 #      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
-#    container_name: kibana
+#    container_name: kibana1

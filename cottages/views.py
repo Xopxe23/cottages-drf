@@ -5,6 +5,8 @@ from django.db.models import Max
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+from elasticsearch_dsl import Search
+from elasticsearch_dsl.search_base import Request as ElasticRequest, Response as ElasticResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -12,7 +14,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from cottages.documents import CottageDocument
+from cottages.documents import CottageDocument, TownDocument
 from cottages.models import Cottage, CottageImage
 from cottages.permissions import IsOwnerOrReadOnly
 from cottages.serializers import (
@@ -105,17 +107,40 @@ def cottage_search(request):
 def cottage_suggest(request):
     query = request.query_params.get('query', '')
 
-    search = CottageDocument.search()
-    suggest = search.suggest('name_suggestions', query, completion={'field': 'name.suggest'})
-    suggest = suggest.suggest('town_suggestions', query, completion={'field': 'town.name.suggest'})
-    response = suggest.execute()
+    search: Search = CottageDocument.search()
+    suggest: Search = search.suggest('name_suggestions', query, completion={'field': 'name.suggest'})
+    suggest: Search = suggest.suggest('town_name_suggestions', query, completion={'field': 'town_name.suggest'})
+    response: ElasticResponse = suggest.execute()
+    cottage_name_suggestions = [
+        {
+            'id': option._source.id,
+            'name': option._source.name,
+            'town_name': option._source.town_name
+        }
+        for option in response.suggest.name_suggestions[0].options
+    ]
 
-    suggestions = {
-        "names": [option._source.name for option in response.suggest.name_suggestions[0].options],
-        "towns": [option._source.town.name for option in response.suggest.town_suggestions[0].options],
-    }
-
-    return Response(suggestions)
+    cottage_town_suggestions = [
+        {
+            'id': option._source.id,
+            'name': option._source.name,
+            'town_name': option._source.town_name
+        }
+        for option in response.suggest.town_name_suggestions[0].options
+    ]
+    cottage_suggestions = cottage_name_suggestions + cottage_town_suggestions
+    search = TownDocument.search()
+    suggest: Search = search.suggest('name_suggestions', query, completion={'field': 'name.suggest'})
+    response: ElasticResponse = suggest.execute()
+    town_suggestions = [
+        {
+            'id': option._source.id,
+            'name': option._source.name,
+        }
+        for option in response.suggest.name_suggestions[0].options
+    ]
+    data = {"cottages": cottage_suggestions, "towns": town_suggestions}
+    return Response(data, status.HTTP_200_OK)
 
 
 @swagger_auto_schema(
